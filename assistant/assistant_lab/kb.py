@@ -16,6 +16,7 @@ import hashlib
 import json
 import re
 from dataclasses import dataclass
+from fnmatch import fnmatch
 from pathlib import Path
 
 _H1_RE = re.compile(r"^# (.+)$", re.MULTILINE)
@@ -46,6 +47,7 @@ class KBConfig:
     min_score: float
     max_query_chars: int
     max_chunk_chars: int
+    exclude_globs: tuple[str, ...] = ()
 
 
 def _require(cond: bool, msg: str) -> None:
@@ -103,6 +105,15 @@ def load_kb_config(path: str | Path) -> KBConfig:
              "max_chunk_chars wajib integer")
     _require(200 <= max_chunk <= 4000, "max_chunk_chars harus 200-4000")
 
+    globs_raw = raw.get("exclude_globs", [])
+    _require(isinstance(globs_raw, list), "exclude_globs wajib list")
+    for g in globs_raw:
+        _require(isinstance(g, str) and g.strip(), "setiap exclude_globs wajib string")
+    # Glob dinormalisasi: hanya dicocokkan ke nama file / path relatif (bukan absolut).
+    exclude_globs = tuple(g.lstrip("/").lstrip("\\") for g in globs_raw)
+    for g in exclude_globs:
+        _require(not g.startswith(".."), f"exclude_globs tidak boleh traversal: {g!r}")
+
     return KBConfig(
         repo_root=repo_root,
         allowed_dirs=tuple(allowed),
@@ -110,6 +121,7 @@ def load_kb_config(path: str | Path) -> KBConfig:
         min_score=float(min_score),
         max_query_chars=max_query,
         max_chunk_chars=max_chunk,
+        exclude_globs=exclude_globs,
     )
 
 
@@ -197,6 +209,13 @@ class KnowledgeBase:
                 if f.name.startswith(".") or any(part.startswith(".") for part in f.parts):
                     self.excluded += 1
                     continue
+                # Mirror terjemahan (*.en.md) dkk dikecualikan: KB hanya memuat
+                # dokumen sumber kebenaran, bukan salinan presentasi.
+                rel_posix = f.relative_to(self.cfg.repo_root).as_posix()
+                if any(fnmatch(f.name, g) or fnmatch(rel_posix, g)
+                       for g in self.cfg.exclude_globs):
+                    self.excluded += 1
+                    continue
                 chunks.extend(parse_markdown(f, self.cfg.repo_root, self.cfg.max_chunk_chars))
         if not chunks:
             raise KBError("knowledge base kosong — tidak ada dokumen yang terindeks")
@@ -212,5 +231,6 @@ class KnowledgeBase:
             "documents": len(self.documents),
             "doc_ids": sorted(self.documents.keys()),
             "allowed_dirs": [str(d) for d in self.cfg.allowed_dirs],
+            "exclude_globs": list(self.cfg.exclude_globs),
             "excluded_hidden_files": self.excluded,
         }

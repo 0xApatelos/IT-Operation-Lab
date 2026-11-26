@@ -61,6 +61,7 @@ Didefinisikan **eksplisit** di `kb.config.json`:
 | `min_score` | 8.0 | ambang abstain (kalibrasi: titik tengah gap skor out-of-scope 5.69 vs answerable 10.54) |
 | `max_query_chars` | 500 | batas input |
 | `max_chunk_chars` | 1200 | chunk panjang dipecah |
+| `exclude_globs` | `["*.en.md"]` | mirror terjemahan dikeluarkan dari KB — KB hanya memuat dokumen sumber kebenaran (D17) |
 
 Metadata tiap chunk: `document_id` (RB-xxx/INC-xxx), `title`, `rel_path`,
 `heading`, `chunk_id`, `content_hash` (sha256 16 hex) — setiap kutipan bisa

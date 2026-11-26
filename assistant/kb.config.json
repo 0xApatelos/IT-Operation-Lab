@@ -1,6 +1,7 @@
 {
   "repo_root": "..",
   "allowed_dirs": ["docs/runbooks", "docs/incidents"],
+  "exclude_globs": ["*.en.md"],
   "top_k": 5,
   "min_score": 8.0,
   "max_query_chars": 500,

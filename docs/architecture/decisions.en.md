@@ -179,3 +179,21 @@ imply priority.
   and 100% auditable to sources; Stage B (provider) is designed as an adapter
   with an explicit cost config — until implemented it refuses to run
   explicitly (no invented price/token numbers).
+
+## D17 — Translation mirrors (`*.en.md`) are excluded from the assistant KB
+
+- **Context:** documentation is now bilingual (mirrors live next to the
+  originals in the same folders). The KB's allowed_dirs include
+  docs/runbooks + docs/incidents — the EN mirrors almost entered the index;
+  when they did (accidentally, during the docs polish), the evaluation
+  changed 0.889 → 1.0 with no code change (E52/E53): the KB is
+  composition-driven, plus near-duplicate chunks would risk duplicate
+  citations.
+- **Decision:** the KB config gained `exclude_globs` (default empty);
+  kb.config.json sets `["*.en.md"]`. The KB keeps only the
+  source-of-truth (Indonesian) documents; EN mirrors are presentation copies
+  for English readers.
+- **Trade-off:** the assistant cannot answer from EN mirrors — by design: a
+  single canonical KB language. If bilingual answers are ever needed, that is
+  an explicit decision (change exclude_globs + re-calibrate min_score), not a
+  side effect of adding files.

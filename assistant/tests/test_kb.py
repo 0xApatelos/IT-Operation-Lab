@@ -75,3 +75,40 @@ def test_empty_corpus_rejected(tmp_path):
         f.unlink()
     with pytest.raises(KBError, match="kosong"):
         KnowledgeBase(load_kb_config(cfg_path)).build()
+
+
+def test_exclude_globs_keeps_translation_mirrors_out(tmp_path):
+    """Mirror terjemahan (*.en.md) dikecualikan dari KB via exclude_globs."""
+    import json
+
+    cfg_path = make_kb(tmp_path, with_ignore_doc=False)
+    repo = (cfg_path.parent / "..").resolve()
+    runbooks = repo / "docs" / "runbooks"
+    src = runbooks / "RB-990-service-down.md"
+    mirror = runbooks / "RB-990-service-down.en.md"
+    mirror.write_text(src.read_text(encoding="utf-8"), encoding="utf-8")
+
+    # Tanpa exclude_globs: mirror ikut terindeks (near-duplicate).
+    kb = KnowledgeBase(load_kb_config(cfg_path)).build()
+    assert any(c.rel_path.endswith(".en.md") for c in kb.chunks)
+
+    # Dengan exclude_globs: mirror keluar, dokumen sumber tetap masuk.
+    cfg = json.loads(cfg_path.read_text(encoding="utf-8"))
+    cfg["exclude_globs"] = ["*.en.md"]
+    cfg_path.write_text(json.dumps(cfg), encoding="utf-8")
+    kb2 = KnowledgeBase(load_kb_config(cfg_path)).build()
+    assert not any(c.rel_path.endswith(".en.md") for c in kb2.chunks)
+    assert any(c.rel_path.endswith("RB-990-service-down.md") for c in kb2.chunks)
+    assert kb2.excluded >= 1
+    assert kb2.stats()["exclude_globs"] == ["*.en.md"]
+
+
+def test_exclude_globs_rejects_traversal_pattern(tmp_path):
+    import json
+
+    cfg_path = make_kb(tmp_path, with_ignore_doc=False)
+    cfg = json.loads(cfg_path.read_text(encoding="utf-8"))
+    cfg["exclude_globs"] = ["../../secret/*"]
+    cfg_path.write_text(json.dumps(cfg), encoding="utf-8")
+    with pytest.raises(KBError, match="traversal"):
+        load_kb_config(cfg_path)

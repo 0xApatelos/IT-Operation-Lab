@@ -171,3 +171,19 @@ menyatakan prioritas.
   bisa diaudit 100% ke sumber; Tahap B (provider) dirancang sebagai adapter
   dengan config biaya eksplisit — sampai diimplementasikan menolak berjalan
   secara eksplisit (tidak ada angka harga/token yang dikarang).
+
+## D17 — Mirror terjemahan (`*.en.md`) dieksklusi dari KB assistant
+
+- **Context:** dokumentasi kini bilingual (mirror `*.en.md` berdampingan di
+  folder yang sama). allowed_dirs KB memuat docs/runbooks + docs/incidents —
+  mirror EN nyaris ikut terindeks; ketika itu terjadi (tanpa sengaja, saat
+  polish dokumentasi), evaluasi berubah 0.889 → 1.0 tanpa perubahan kode
+  (E52/E53): KB sangat dipengaruhi komposisi korpus, ditambah risiko chunk
+  near-duplicate dan citation ganda.
+- **Decision:** config KB mendapat `exclude_globs` (default kosong);
+  kb.config.json menyetel `["*.en.md"]`. KB hanya memuat dokumen sumber
+  kebenaran (Indonesia); mirror EN adalah salinan presentasi untuk pembaca EN.
+- **Trade-off:** assistant tidak bisa menjawab dari mirror EN — sesuai
+  desain: KB kanonik satu bahasa. Bila nanti dibutuhkan jawaban bilingual,
+  itu keputusan eksplisit (ubah exclude_globs + re-kalibrasi min_score),
+  bukan efek samping penambahan file.

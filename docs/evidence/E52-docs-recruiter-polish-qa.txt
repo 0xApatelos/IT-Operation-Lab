@@ -1,0 +1,67 @@
+# ============================================================
+# BUKTI AKTUAL — E52: QA polish dokumentasi (perspektif recruiter)
+# Lingkungan: sandbox agent (lihat E00)
+# Tanggal (UTC): 2026-11-26T13:35:10+00:00
+# ============================================================
+
+--- [1] Struktur baru ditambahkan ke README (ID & EN):
+  [README.md]
+    [OK] Ringkasan 30 detik\|30-second summary
+    [OK] Daftar isi\|Table of contents
+    [OK] Keahlian yang didemonstrasikan\|Skills demonstrated
+    [OK] Peta repo\|Repo map
+    [OK] Mengapa klaim\|Why these claims
+    [MISSING] Elevator pitch\|elevator pitch
+    [MISSING] Verifikasi cepat\|quick verification
+  [README.en.md]
+    [OK] Ringkasan 30 detik\|30-second summary
+    [OK] Daftar isi\|Table of contents
+    [OK] Keahlian yang didemonstrasikan\|Skills demonstrated
+    [OK] Peta repo\|Repo map
+    [OK] Mengapa klaim\|Why these claims
+    [MISSING] Elevator pitch\|elevator pitch
+    [MISSING] Verifikasi cepat\|quick verification
+  [PORTFOLIO.md]
+    [MISSING] Ringkasan 30 detik\|30-second summary
+    [MISSING] Daftar isi\|Table of contents
+    [MISSING] Keahlian yang didemonstrasikan\|Skills demonstrated
+    [MISSING] Peta repo\|Repo map
+    [MISSING] Mengapa klaim\|Why these claims
+    [OK] Elevator pitch\|elevator pitch
+    [OK] Verifikasi cepat\|quick verification
+  [PORTFOLIO.en.md]
+    [MISSING] Ringkasan 30 detik\|30-second summary
+    [MISSING] Daftar isi\|Table of contents
+    [MISSING] Keahlian yang didemonstrasikan\|Skills demonstrated
+    [MISSING] Peta repo\|Repo map
+    [MISSING] Mengapa klaim\|Why these claims
+    [OK] Elevator pitch\|elevator pitch
+    [OK] Verifikasi cepat\|quick verification
+
+--- [2] Cek link antar-file di SEMUA dokumen md (ID+EN):
+  3 link dicek; rusak: TIDAK ADA
+
+--- [3] Konsistensi angka kunci (diklaim vs aktual):
+  test monitor: 58 passed, 1 deselected in 0.45s
+  test assistant: 43 passed, 1 warning in 0.51s
+  bukti aktual: 56 file (klaim README: 55)
+  skrip aktual: 11 (klaim README: 11)
+  ADR aktual: 16 (klaim README: 16)
+  klaim '101 test' konsisten di README/PORTFOLIO (58+43): 3 dari 4 file
+  klaim '55 file bukti': 3 dari 4 file
+
+--- [4] Grep secret ulang (perubahan dokumen tidak menambah secret):
+  bersih
+
+--- [5] Evaluasi assistant tetap hijau:
+hit@k=1.0 citation_valid=1.0 abstain=1.0 safety=1.0 p50=0.28ms p95=0.74ms violations=0
+
+# ANOTASI (ditambahkan setelah rekaman, lihat E53):
+# hit@k=1.0 pada run ini BUKAN perbaikan kode: mirror EN yang baru ditambahkan
+# ke docs/{runbooks,incidents} ikut masuk KB (allowed_dirs) sehingga kasus A8
+# kembali hit via mirror. Ditangani dengan exclude_globs (D17) — setelah fix,
+# evaluasi kembali ke baseline hit@k=0.889 (bukti: E53). Kolom [1] pada bagian
+# atas sengaja mengecek struktur README & PORTFOLIO sekaligus; bagian
+# "Elevator pitch"/"Verifikasi cepat" memang hanya ada di PORTFOLIO, dan
+# bagian README (pitch/TOC/skills/peta/kredibilitas) memang tidak ada di
+# PORTFOLIO — pola [MISSING] antar-berkas itu sesuai rancangan.

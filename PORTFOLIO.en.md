@@ -6,6 +6,27 @@
 > measured, not invented. Detailed per-feature status: `README.en.md`.
 > Indonesian original: `PORTFOLIO.md`.
 
+## 30-second elevator pitch
+
+This repo proves two competencies through artifacts, not claims: five Linux
+incident scenarios built, broken, diagnosed, and recovered end to end (57
+real-execution evidence files), and an AI assistant whose every answer is
+traceable to the runbooks and which refuses to invent risky procedures.
+**103 automated tests green, 0 safety violations in a 21-case evaluation** —
+and development failures are kept as-is as evidence of how the work is done.
+
+## 5-minute quick verification (for recruiters)
+
+| Minute | Open | What you will see |
+|---|---|---|
+| 1 | `docs/evidence/E41-monitor-integrasi-homelab.txt` | the full flow: healthy → outage → detection → recovery (exit 0→1→0) |
+| 2 | `assistant/evaluation/report.md` | an honest evaluation: metrics split per aspect, the weakness (case A8) stated |
+| 3 | `docs/evidence/E45…E47` (assistant CLI) | citing answers → honest abstain → refusing injection |
+| 4 | `docs/incidents/INC-001-service-down.en.md` §17 | a real failure (Access denied) + its analysis, not hidden |
+| 5 | `docs/architecture/decisions.en.md` D14 & D16 | technical depth: two systemd failure signatures; extractive vs generative |
+
+(Evidence file names keep their Indonesian names — they are the originals.)
+
 ## A. IT Support Homelab — `lab/` + `docs/`
 
 **Recruiter summary.** An isolated Linux lab environment (target: Ubuntu VM;
@@ -13,7 +34,7 @@ actually executed in a systemd sandbox) with one practice service and **five
 incident scenarios** that can be reproduced and recovered end to end: service
 stopped, disk over threshold, DNS failure, wrong permissions, port conflict.
 Each incident has a 16-section document (symptoms → hypotheses → diagnostics →
-root cause → fix → verification → prevention) plus a quick runbook, with 50+
+root cause → fix → verification → prevention) plus a quick runbook, with 57
 evidence files of real executions.
 
 **Three technical contributions (backed by real implementation):**
@@ -107,6 +128,10 @@ INC-001 actually contains the reinstall guidance (§14), so the case
 expectation was too narrow. Decision: **left as-is** (no tuning after seeing
 results) and documented in `E48` + the report limitations; the threshold
 calibration is also explicitly declared as not an independent validation set.
+Additional lesson (`E53`): when EN mirrors accidentally entered the KB,
+hit@k shifted 0.889 → 1.0 with no code change — proof that retrieval metrics
+are sensitive to corpus composition; the KB was locked to source-of-truth
+documents via `exclude_globs` (D17) and the 0.889 baseline was restored.
 
 **One trade-off to discuss.** Extractive vs generative (D16): answers are
 stiffer than an LLM, but 100% auditable to the source, cannot invent risky

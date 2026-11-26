@@ -64,6 +64,7 @@ Defined **explicitly** in `kb.config.json`:
 | `min_score` | 8.0 | abstain threshold (calibration: midpoint between out-of-scope top-1 max 5.69 and answerable min 10.54) |
 | `max_query_chars` | 500 | input limit |
 | `max_chunk_chars` | 1200 | long sections are split |
+| `exclude_globs` | `["*.en.md"]` | translation mirrors are excluded — the KB keeps only source-of-truth documents (D17) |
 
 Per-chunk metadata: `document_id` (RB-xxx/INC-xxx), `title`, `rel_path`,
 `heading`, `chunk_id`, `content_hash` (sha256 16 hex) — every citation is

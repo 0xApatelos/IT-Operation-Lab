@@ -4,6 +4,18 @@ Portofolio terintegrasi untuk dua fokus: **IT Specialist** (troubleshooting
 sistematis, otomasi pemeriksaan) dan **AI Enthusiast** (asisten berbasis
 dokumentasi dengan kutipan sumber yang bisa diperiksa).
 
+> **Ringkasan 30 detik.** Tiga proyek saling terhubung yang membuktikan dua
+> peran lewat artefak, bukan klaim: **(1) IT Specialist** — lingkungan lab
+> Linux dengan 5 skenario insiden end-to-end (gejala → diagnostik → root
+> cause → pemulihan terverifikasi) yang diotomasi monitor kesehatan;
+> **(2) AI Enthusiast** — asisten helpdesk *documentation-grounded* dengan
+> kutipan sumber, abstain jujur, dan pertahanan prompt injection.
+> **103 test otomatis hijau · 57 file bukti eksekusi nyata · 0 pelanggaran
+> keamanan pada evaluasi 21 kasus · setiap klaim bisa dilacak ke bukti.**
+> Navigasi cepat: [Peta repo](#peta-repo) ·
+> [Verifikasi 6 menit](#panduan-demo-510-menit-untuk-wawancara) ·
+> [PORTFOLIO.md](PORTFOLIO.md) (ringkasan per proyek untuk recruiter).
+
 Tiga komponen:
 
 1. **IT Support Homelab** (`lab/` + `docs/`) — lingkungan VM terisolasi,
@@ -16,7 +28,7 @@ Tiga komponen:
 
 > **Status jujur per Fase 3 (2026-11-26):** ketiga komponen selesai. Fase 1
 > (5/5 insiden), Fase 2 (monitor: 58 unit test + integration + webhook nyata +
-> scheduler), Fase 3 (assistant search-only: 43 unit test + evaluasi 21 kasus
+> scheduler), Fase 3 (assistant search-only: 45 unit test + evaluasi 21 kasus
 > tanpa pelanggaran keamanan + server nyata). Semua bukti eksekusi nyata di
 > `docs/evidence/`. Eksekusi di VM milik pemilik repo berstatus *requires
 > manual verification*. Tidak ada klaim pengujian yang belum dijalankan.
@@ -25,12 +37,66 @@ Tiga komponen:
 > Inggris tersedia sebagai mirror `*.en.md` — mulai dari **[README.en.md](README.en.md)**.
 > Matriks file terjemahan ada di README.en.md §Documentation languages.
 
+## Daftar isi
+
+1. [Masalah & pendekatan](#masalah-apa-yang-diselesaikan)
+2. [Keahlian yang didemonstrasikan](#keahlian-yang-didemonstrasikan)
+3. [Status implementasi per fitur](#apa-yang-benar-benar-diimplementasikan)
+4. [Arsitektur: 3 komponen terhubung](#bagaimana-ketiga-komponen-terhubung)
+5. [Peta repo](#peta-repo)
+6. [Quick start](#bagaimana-menjalankannya-quick-start)
+7. [Cara menguji & mereproduksi](#bagaimana-menguji-dan-mereproduksi-insiden)
+8. [Bukti eksekusi E00–E53](#di-mana-bukti--demo)
+9. [Mengapa klaim ini bisa dipercaya](#mengapa-klaim-ini-bisa-dipercaya)
+10. [Prasyarat](#prasyarat) · [Keterbatasan](#keterbatasan--risiko-keamanan)
+11. [Panduan demo wawancara](#panduan-demo-510-menit-untuk-wawancara)
+12. [Roadmap](#roadmap) · [Lisensi](#lisensi)
+
 ## Masalah apa yang diselesaikan?
 
 Latihan IT operations biasanya berhenti di "ikut tutorial tanpa bukti".
 Repo ini membuat lingkungan lab yang **bisa diinsidenkan secara terkontrol**,
 dideteksi otomatis, dan didokumentasikan dari kondisi normal sampai pulih —
 dengan bukti eksekusi nyata, bukan output yang dikarang.
+
+Yang membedakan repo ini dari portofolio tutorial pada umumnya:
+
+- **Reproduksibel** — tiap file bukti mencantumkan perintah repro di
+  headernya; siapa pun bisa mengulang alurnya dari kondisi normal.
+- **Klaim per fitur, bukan klaim per proyek** — tabel status memisahkan
+  implemented / tested / simulated / requires manual verification / planned.
+- **Keselamatan by design** — fixture disposable, guard anti-salah-sasaran,
+  tanpa auto-remediation, tanpa secret di repo.
+
+## Keahlian yang didemonstrasikan
+
+Setiap keahlian di bawah punya artefak nyata yang bisa dibuka di repo —
+bukan kursus yang ditonton. "Bukti" = file eksekusi (`docs/evidence/`) atau
+keputusan teknis (`docs/architecture/decisions.md`).
+
+**Peran 1 — IT Specialist:**
+
+| Keahlian | Didemonstrasikan lewat | Bukti / artefak |
+|---|---|---|
+| Linux & systemd | unit hardened (user khusus, sandboxing ringan), journald, start-limit | `E01`, `E05`–`E06`, D8 |
+| Troubleshooting insiden end-to-end | 5 skenario: gejala → hipotesis → root cause → pulih terverifikasi | `E04`–`E31`, `docs/incidents/` |
+| Kapasitas & disk | threshold check + simulasi aman via fixture tmpfs (root fs tak tersentuh) | `E10`–`E17`, D12 |
+| DNS & jaringan | check DNS/TCP/HTTP, boundary host-only + NAT tanpa inbound | `E18`–`E20`, D3 |
+| Bash & POSIX tooling | 11 skrip operasional dengan guard keselamatan & exit code disiplin | `lab/scripts/` |
+| Keamanan operasional | least privilege, batas sudo (kegagalan nyata dijadikan pelajaran), tanpa auto-remediation | `E03`, D8, safety-rules |
+| Otomasi & scheduling | systemd timer: `verify` + trigger nyata + hasil di journald | `E42` |
+| Dokumentasi teknis | 16 ADR (context→decision→trade-off), insiden 16 bagian, runbook | `decisions.md`, `docs/incidents/` |
+
+**Peran 2 — AI Enthusiast:**
+
+| Keahlian | Didemonstrasikan lewat | Bukti / artefak |
+|---|---|---|
+| RAG grounded + citation | jawaban ekstraktif + metadata chunk (id/hash/path) + re-validasi citation di server | `E45`, `E50`, D16 |
+| Information retrieval | BM25 Okapi implementasi stdlib + kalibrasi ambang abstain | `E49`, D16 |
+| Evaluasi retrieval/model yang jujur | metrik terpisah per aspek, latensi p50/p95, token/biaya N/A dengan alasan, rubrik manual | `assistant/evaluation/report.md` |
+| Keamanan prompt injection | instruksi injection secara struktural tak bisa dipatuhi (ekstraktif) + deteksi pola + test fixture | `E47`, `tests/test_security.py` |
+| API engineering | FastAPI bind lokal, batas input, log tanpa konten query | `E50` |
+| Disiplin software engineering | 103 test hijau, ruff bersih, CI lint+test+evaluasi | `E34`, `E43`, `ci.yml` |
 
 ## Apa yang benar-benar diimplementasikan?
 
@@ -49,7 +115,7 @@ dengan bukti eksekusi nyata, bukan output yang dikarang.
 | Monitor: exit code 0/1/2, JSON + teks, timestamp timezone | implemented + **tested** |
 | Monitor: webhook alert (env-based, dedup, retry) | implemented + **tested** + bukti kirim nyata |
 | Monitor: logging JSON + rotasi, scheduler systemd timer | implemented; unit diverifikasi; periodik di VM = requires manual verification |
-| Assistant: KB builder eksplisit + BM25 search-only + citation tervalidasi | implemented + **tested** (43 unit test; evaluasi 21 kasus) |
+| Assistant: KB builder eksplisit + BM25 search-only + citation tervalidasi | implemented + **tested** (45 unit test; evaluasi 21 kasus) |
 | Assistant: abstain out-of-scope + label query injection + UI lokal | implemented + **tested** (+ server nyata) |
 | Assistant: adapter model Tahap B (lokal/API) | planned (interface siap; menolak berjalan eksplisit) |
 | Eksekusi panduan setup VM VMware + Ubuntu 24.04 di VM pemilik repo | requires manual verification |
@@ -70,6 +136,28 @@ flowchart LR
   yang dipakai scheduler).
 - Assistant **hanya membantu mencari** langkah dari dokumentasi dengan
   kutipan; tidak mengeksekusi perintah dan tidak memperbaiki otomatis.
+
+## Peta repo
+
+```
+it-operations-ai-lab/
+├── README.md               ← Anda di sini (Indonesia) · README.en.md (Inggris)
+├── PORTFOLIO.md            ← ringkasan per proyek untuk recruiter + peta bukti
+├── lab/                    ← Fase 1: layanan latihan + 11 skrip insiden
+├── monitor/                ← Fase 2: CLI health check (58 unit test)
+├── assistant/              ← Fase 3: asisten search-only (45 unit test, evaluasi 21 kasus)
+├── docs/
+│   ├── architecture/       ← diagram jaringan + 16 keputusan teknis (ADR)
+│   ├── evidence/           ← 57 file bukti eksekusi nyata (E00–E53)
+│   ├── incidents/          ← 5 dokumen insiden 16 bagian (INC-001..005)
+│   ├── runbooks/           ← 5 runbook cepat (sumber KB assistant)
+│   ├── security/           ← aturan keselamatan lab & label bukti
+│   └── setup/              ← panduan VM VMware/Ubuntu + teardown
+└── .github/workflows/      ← CI: lint + unit test + evaluasi assistant
+```
+
+Bacaan tercepat untuk rekruter: `PORTFOLIO.md` → `docs/evidence/E41` →
+`assistant/evaluation/report.md` → `decisions.md` (D14, D16).
 
 ## Bagaimana menjalankannya? (quick start)
 
@@ -127,7 +215,7 @@ verification).
   `python3 -m pytest monitor/tests` → 58 lulus.
 - Monitor integration lokal (butuh demo-http aktif):
   `python3 -m pytest monitor/tests -m integration`.
-- Assistant unit test: `python3 -m pytest assistant/tests` → 43 lulus.
+- Assistant unit test: `python3 -m pytest assistant/tests` → 45 lulus.
 - Assistant evaluasi: `python3 assistant/evaluation/evaluate.py` → 21 kasus,
   laporan di `assistant/evaluation/report.md`.
 - Lint: `ruff check` untuk monitor & assistant → bersih.
@@ -164,10 +252,28 @@ Sorotan:
 | `E45`–`E47` | assistant CLI: query answered + citation, abstain out-of-scope, injection → safety_note |
 | `E48` | evaluasi 21 kasus: hit@k 0.889, citation 1.0, abstain 1.0, safety 1.0, latensi p50/p95 dilaporkan |
 | `E49`–`E50` | KB 133 chunks/11 dokumen (explicit dirs); server FastAPI nyata (health/query/abstain/batasan/UI relatif) |
+| `E51` | QA akhir repo: YAML CI valid, grep secret bersih, README 7/7 checklist, re-run semua test hijau |
+| `E52` | QA polish dokumentasi (perspektif recruiter): struktur baru 5/5, link & angka konsisten + anotasi temuan |
+| `E53` | side effect mirror EN pada KB (hit@k sempat 1.0) → fix `exclude_globs` (D17) → baseline kembali: 0.889, 133/11, 45 test |
 
 Diagram arsitektur & jaringan: `docs/architecture/` (Mermaid + SVG).
 Keputusan teknis & trade-off: `docs/architecture/decisions.md`.
 Ringkasan per proyek untuk recruiter + peta bukti cepat: `PORTFOLIO.md`.
+
+## Mengapa klaim ini bisa dipercaya
+
+- **Setiap klaim → bukti.** Angka dalam repo ini (103 test, hit@k 0.889,
+  latensi p50/p95) berasal dari eksekusi nyata dengan header lingkungan dan
+  tanggal — output ilustratif selalu dilabeli `CONTOH`.
+- **Kegagalan tidak dihapus.** `E03` (stop tanpa sudo ditolak systemd),
+  `E28` (settle logic meleset pada rekaman pertama), dan 10 test gagal pada
+  run pertama monitor dipertahankan apa adanya + dianalisis — cara menghadapi
+  kegagalan adalah bagian dari portofolio.
+- **Angka AI tidak pernah digabung jadi satu.** Retrieval, citation, abstain,
+  dan safety dilaporkan terpisah; token/biaya dilaporkan N/A karena memang
+  tidak ada provider — bukan disembunyikan.
+- **Repro eksplisit.** Setiap klaim bisa diverifikasi ulang: perintah repro
+  ada di header file bukti dan di §Panduan demo.
 
 ## Prasyarat
 

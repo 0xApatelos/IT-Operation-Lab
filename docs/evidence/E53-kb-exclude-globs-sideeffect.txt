@@ -1,0 +1,73 @@
+# ============================================================
+# BUKTI AKTUAL — E53: side effect mirror EN pada KB assistant + perbaikan (exclude_globs)
+# Lingkungan: sandbox agent (lihat E00); python SISTEM (bukan .venv) — lingkungan bukti sejak Fase 2/3
+# Tanggal (UTC): 2026-11-26T13:52:00+00:00
+# ============================================================
+
+## Latar (discovery)
+
+Saat polish dokumentasi recruiter (E52), mirror bahasa Inggris
+(RB-001-service-down.en.md, INC-001-service-down.en.md) ditambahkan ke
+docs/runbooks/ dan docs/incidents/ — dua direktori itu adalah allowed_dirs KB
+assistant. Tanpa disadari, komposisi KB berubah:
+
+- SEBELUM: 133 chunks / 11 dokumen; evaluasi hit@k = 0.889 (kasus A8 miss —
+  dianalisis jujur di E48).
+- SETELAH mirror EN masuk: KB bertambah 2 dokumen near-duplicate;
+  `python3 assistant/evaluation/evaluate.py` → hit@k = 1.0 (tercatat di E52 §[5]).
+  A8 kembali hit karena mirror EN RB-001 masuk hasil retrieval.
+
+## Keputusan
+
+KB = sumber kebenaran Indonesia. Mirror EN adalah salinan presentasi —
+dieksklusi via konfigurasi baru `exclude_globs` (D17), bukan dibiarkan
+menduplikasi korpus (risiko: chunk near-duplicate, citation ganda, metrik
+bergeser tanpa perubahan kode).
+
+## Perubahan kode (kecil, teruji)
+
+- assistant/kb.config.json: +"exclude_globs": ["*.en.md"]
+- assistant/assistant_lab/kb.py: KBConfig.exclude_globs (default ()); validasi
+  (wajib list string; pola traversal "../../" ditolak); build() memfilter file
+  via fnmatch pada nama file & path relatif; stats() menampilkan exclude_globs.
+- assistant/tests/test_kb.py: +2 test (mirror ikut terindeks tanpa glob;
+  terexcluded dengan glob; pola traversal ditolak).
+
+## Re-run aktual (python sistem)
+
+$ python3 -m pytest assistant/tests -q
+45 passed, 1 warning in 0.39s            # 43 lama + 2 baru
+
+$ python3 -m ruff check assistant/assistant_lab assistant/tests assistant/evaluation
+All checks passed!
+
+$ python3 -m assistant_lab.cli index-stats
+{
+  "chunks": 133,
+  "documents": 11,
+  "doc_ids": ["INC-001".."INC-005","RB-001".."RB-005","README"],
+  ...,
+  "exclude_globs": ["*.en.md"]           # mirror EN tidak lagi di KB
+}
+
+$ python3 assistant/evaluation/evaluate.py
+hit@k=0.889 citation_valid=1.0 abstain=1.0 safety=1.0 p50=0.13ms p95=0.29ms violations=0
+                                        # kembali ke baseline; angka dokumen tetap valid
+
+$ python3 -m pytest monitor/tests -q
+58 passed, 1 deselected in 0.42s        # monitor tidak terdampak
+
+## Catatan lingkungan (pembelajaran)
+
+`.venv` di root repo ternyata hanya berisi monitor (+pytest/ruff) tanpa
+assistant/fastapi — menjalankan pytest lewat .venv menghasilkan "38 passed,
+1 skipped" (test_server.py di-skip via pytest.importorskip karena fastapi tak
+ada). Seluruh bukti Fase 2/3 memakai python SISTEM. Pembelajaran: selalu
+pin lingkungan eksekusi di header bukti; venv parsial bisa mengubah hasil.
+
+## Implikasi angka di dokumen
+
+- Assistant unit test: 43 → **45** (klaim di README/PORTFOLIO diperbarui).
+- Total test: 58+45 = **103**.
+- Bukti: bertambah E52, E53 (total dihitung ulang oleh README; lihat indeks).
+- hit@k 0.889, 133 chunks / 11 docs: tetap valid (baseline dikembalikan).

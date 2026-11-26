@@ -4,6 +4,18 @@ An integrated portfolio demonstrating two focus areas: **IT Specialist**
 (systematic troubleshooting, check automation) and **AI Enthusiast**
 (documentation-grounded assistance with verifiable citations).
 
+> **30-second summary.** Three connected projects proving two roles through
+> artifacts, not claims: **(1) IT Specialist** — a Linux lab environment with
+> 5 end-to-end incident scenarios (symptoms → diagnostics → root cause →
+> verified recovery) automated by a health monitor; **(2) AI Enthusiast** — a
+> documentation-grounded helpdesk assistant with verifiable citations, honest
+> abstention, and prompt-injection defenses.
+> **103 automated tests green · 57 real-execution evidence files · 0 safety
+> violations in a 21-case evaluation · every claim traceable to evidence.**
+> Quick navigation: [Repo map](#repo-map) ·
+> [6-minute verification](#510-minute-demo-guide-for-interviews) ·
+> [PORTFOLIO.en.md](PORTFOLIO.en.md) (per-project recruiter summary).
+
 Three components:
 
 1. **IT Support Homelab** (`lab/` + `docs/`) — an isolated lab environment, a
@@ -16,7 +28,7 @@ Three components:
 
 > **Honest status as of Phase 3 (2026-11-26):** all three components are done.
 > Phase 1 (5/5 incidents), Phase 2 (monitor: 58 unit tests + integration +
-> live webhook + scheduler), Phase 3 (assistant search-only: 43 unit tests +
+> live webhook + scheduler), Phase 3 (assistant search-only: 45 unit tests +
 > a 21-case evaluation with zero safety violations + live server). All claims
 > are backed by real execution evidence in `docs/evidence/`. Execution on the
 > owner's VM is *requires manual verification*. No untested claims — see the
@@ -48,12 +60,67 @@ INC-002–005 and RB-002–005. Code docstrings/comments are Indonesian by
 convention; identifiers are English. If a mirror and its original diverge,
 the Indonesian version is the source of truth — please flag it.
 
+## Table of contents
+
+1. [Problem & approach](#what-problem-does-this-solve)
+2. [Skills demonstrated](#skills-demonstrated)
+3. [Per-feature implementation status](#what-is-actually-implemented)
+4. [Architecture: 3 connected components](#how-do-the-three-components-connect)
+5. [Repo map](#repo-map)
+6. [Quick start](#how-do-i-run-it-quick-start)
+7. [Testing & reproduction](#how-do-i-test-and-reproduce-the-incidents)
+8. [Execution evidence E00–E53](#where-is-the-evidence--demo)
+9. [Why these claims are trustworthy](#why-these-claims-are-trustworthy)
+10. [Prerequisites](#prerequisites) · [Limitations](#limitations--security-risks)
+11. [Interview demo guide](#510-minute-demo-guide-for-interviews)
+12. [Roadmap](#roadmap) · [License](#license)
+
 ## What problem does this solve?
 
 IT-operations practice usually stops at "followed a tutorial with no proof".
 This repo builds a lab environment that can be **deliberately broken in a
 controlled way**, detected automatically, and documented from healthy state
 to recovery — with real execution evidence, not invented output.
+
+What makes this repo different from tutorial portfolios:
+
+- **Reproducible** — every evidence file lists its repro commands in the
+  header; anyone can re-run the flow from a healthy state.
+- **Per-feature claims, not per-project claims** — the status table
+  separates implemented / tested / simulated / requires manual verification
+  / planned.
+- **Safety by design** — disposable fixtures, wrong-target guards, no
+  auto-remediation, no secrets in the repo.
+
+## Skills demonstrated
+
+Every skill below has a real artifact you can open in the repo — not a
+watched course. "Evidence" = execution files (`docs/evidence/`) or technical
+decisions (`docs/architecture/decisions.en.md`).
+
+**Role 1 — IT Specialist:**
+
+| Skill | Demonstrated by | Evidence / artifact |
+|---|---|---|
+| Linux & systemd | hardened unit (dedicated user, light sandboxing), journald, start-limit | `E01`, `E05`–`E06`, D8 |
+| End-to-end incident troubleshooting | 5 scenarios: symptoms → hypotheses → root cause → verified recovery | `E04`–`E31`, `docs/incidents/` |
+| Capacity & disk | threshold check + safe simulation via a tmpfs fixture (root fs untouched) | `E10`–`E17`, D12 |
+| DNS & networking | DNS/TCP/HTTP checks, host-only + NAT boundary with no inbound | `E18`–`E20`, D3 |
+| Bash & POSIX tooling | 11 operational scripts with safety guards & disciplined exit codes | `lab/scripts/` |
+| Operational security | least privilege, sudo boundary (a real failure kept as a lesson), no auto-remediation | `E03`, D8, safety-rules |
+| Automation & scheduling | systemd timer: `verify` + a real trigger + results in journald | `E42` |
+| Technical documentation | 16 ADRs (context→decision→trade-off), 16-section incidents, runbooks | `decisions.md`, `docs/incidents/` |
+
+**Role 2 — AI Enthusiast:**
+
+| Skill | Demonstrated by | Evidence / artifact |
+|---|---|---|
+| Grounded RAG + citations | extractive answers + chunk metadata (id/hash/path) + server-side citation re-validation | `E45`, `E50`, D16 |
+| Information retrieval | stdlib BM25 Okapi implementation + abstain-threshold calibration | `E49`, D16 |
+| Honest retrieval/model evaluation | metrics split per aspect, p50/p95 latency, tokens/cost N/A with a reason, manual rubric | `assistant/evaluation/report.md` |
+| Prompt-injection security | injection instructions structurally impossible to obey (extractive) + pattern detection + test fixture | `E47`, `tests/test_security.py` |
+| API engineering | local-bind FastAPI, input limits, logs without query content | `E50` |
+| Software engineering discipline | 103 tests green, clean ruff, CI lint+test+evaluation | `E34`, `E43`, `ci.yml` |
 
 ## What is actually implemented?
 
@@ -72,7 +139,7 @@ to recovery — with real execution evidence, not invented output.
 | Monitor: exit codes 0/1/2, JSON + text output, timezone timestamps | implemented + **tested** |
 | Monitor: webhook alerts (env-based, dedup, retry) | implemented + **tested** + live-send evidence |
 | Monitor: JSON logging with rotation, systemd-timer scheduler | implemented; unit verified; periodic runs on VM = requires manual verification |
-| Assistant: explicit KB builder + BM25 search-only + validated citations | implemented + **tested** (43 unit tests; 21-case evaluation) |
+| Assistant: explicit KB builder + BM25 search-only + validated citations | implemented + **tested** (45 unit tests; 21-case evaluation) |
 | Assistant: out-of-scope abstain + injection labeling + local UI | implemented + **tested** (+ live server) |
 | Assistant: Stage-B model adapter (local/API) | planned (interface ready; refuses to run explicitly) |
 | Executing the VMware + Ubuntu 24.04 setup guide on the owner's VM | requires manual verification |
@@ -93,6 +160,29 @@ flowchart LR
   0/1/2 consumed by the scheduler).
 - The assistant **only helps find** the documented steps with citations; it
   never executes commands and never auto-remediates.
+
+## Repo map
+
+```
+it-operations-ai-lab/
+├── README.md               ← Indonesian original · README.en.md (you are here)
+├── PORTFOLIO.en.md         ← per-project recruiter summary + evidence map
+├── lab/                    ← Phase 1: practice service + 11 incident scripts
+├── monitor/                ← Phase 2: health-check CLI (58 unit tests)
+├── assistant/              ← Phase 3: search-only assistant (45 tests, 21-case evaluation)
+├── docs/
+│   ├── architecture/       ← network diagram + 16 technical decisions (ADRs)
+│   ├── evidence/           ← 57 real-execution evidence files (E00–E53)
+│   ├── incidents/          ← 5 sixteen-section incident documents (INC-001..005)
+│   ├── runbooks/           ← 5 quick runbooks (the assistant's KB source)
+│   ├── security/           ← lab safety rules & evidence labels
+│   └── setup/              ← VMware/Ubuntu VM guide + teardown
+└── .github/workflows/      ← CI: lint + unit tests + assistant evaluation
+```
+
+Fastest reading path for recruiters: `PORTFOLIO.en.md` →
+`docs/evidence/E41` → `assistant/evaluation/report.md` → `decisions.en.md`
+(D14, D16).
 
 ## How do I run it? (quick start)
 
@@ -150,7 +240,7 @@ requires manual verification).
   `python3 -m pytest monitor/tests` → 58 pass.
 - Monitor local integration (requires demo-http running):
   `python3 -m pytest monitor/tests -m integration`.
-- Assistant unit tests: `python3 -m pytest assistant/tests` → 43 pass.
+- Assistant unit tests: `python3 -m pytest assistant/tests` → 45 pass.
 - Assistant evaluation: `python3 assistant/evaluation/evaluate.py` → 21 cases,
   report in `assistant/evaluation/report.md`.
 - Lint: `ruff check` for monitor & assistant → clean.
@@ -188,10 +278,27 @@ with environment headers and timestamps. Full index:
 | `E48` | 21-case evaluation: hit@k 0.889, citations 1.0, abstain 1.0, safety 1.0, latency reported |
 | `E49`–`E50` | KB 133 chunks/11 docs (explicit dirs); live FastAPI server (health/query/abstain/limits/relative-URL UI) |
 | `E51` | final repo QA: CI YAML valid, secret grep clean, README 7/7 checklist, re-runs green |
+| `E52` | docs polish QA (recruiter perspective): new structure 5/5, links & numbers consistent + honest annotation |
+| `E53` | EN-mirror side effect on the KB (hit@k briefly 1.0) → fixed with `exclude_globs` (D17) → baseline restored: 0.889, 133/11, 45 tests |
 
 Architecture & network diagrams: `docs/architecture/` (Mermaid + SVG).
 Technical decisions & trade-offs: `docs/architecture/decisions.en.md`.
 Per-project recruiter summaries + evidence quick map: `PORTFOLIO.en.md`.
+
+## Why these claims are trustworthy
+
+- **Every claim → evidence.** Numbers in this repo (103 tests, hit@k 0.889,
+  p50/p95 latency) come from real executions with environment headers and
+  dates — illustrative output is always labeled `CONTOH` (example).
+- **Failures are kept, not deleted.** `E03` (stop without sudo rejected by
+  systemd), `E28` (the settle logic missed on the first recording), and the
+  first monitor test run with 10 failing tests are preserved as-is and
+  analyzed — how failures are handled is part of the portfolio.
+- **AI numbers are never merged into one.** Retrieval, citation, abstain,
+  and safety are reported separately; tokens/cost are reported N/A because
+  there is no provider — not hidden.
+- **Explicit repro.** Every claim can be re-verified: repro commands are in
+  each evidence header and in the demo guide.
 
 ## Prerequisites
 

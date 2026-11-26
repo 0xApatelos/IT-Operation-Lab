@@ -5,6 +5,25 @@
 > Tidak ada angka dampak bisnis, jumlah pengguna, atau penghematan waktu —
 > tidak diukur, tidak dikarang. Status terperinci per fitur: `README.md`.
 
+## Elevator pitch (30 detik)
+
+Repo ini membuktikan dua kompetensi lewat artefak, bukan klaim: lima skenario
+insiden Linux yang dibangun–dipatahkan–didagnosis–dipulihkan end-to-end
+(57 file bukti eksekusi nyata), dan asisten AI yang setiap jawabannya bisa
+dilacak ke runbook serta menolak mengarang prosedur berisiko. **103 test
+otomatis hijau, 0 pelanggaran keamanan pada evaluasi 21 kasus** — dan
+kegagalan development dipertahankan apa adanya sebagai bukti cara kerja.
+
+## Verifikasi cepat 5 menit (untuk perekrut)
+
+| Menit | Buka | Yang terlihat |
+|---|---|---|
+| 1 | `docs/evidence/E41-monitor-integrasi-homelab.txt` | alur lengkap: sehat → gangguan → deteksi → pulih (exit 0→1→0) |
+| 2 | `assistant/evaluation/report.md` | evaluasi jujur: metrik terpisah per aspek, kelemahan (kasus A8) dinyatakan |
+| 3 | `docs/evidence/E45…E47` (CLI assistant) | menjawab berkutipan → abstain jujur → menolak injection |
+| 4 | `docs/incidents/INC-001-service-down.md` §17 | kegagalan nyata (Access denied) + analisisnya, bukan disembunyikan |
+| 5 | `docs/architecture/decisions.md` D14 & D16 | kedalaman teknis: dua signature kegagalan systemd; ekstraktif vs generatif |
+
 ## A. IT Support Homelab — `lab/` + `docs/`
 
 **Ringkasan recruiter.** Lingkungan lab Linux terisolasi (VM Ubuntu target,
@@ -13,7 +32,7 @@ skenario insiden** yang bisa direproduksi dan dipulihkan end-to-end: layanan
 berhenti, disk melewati ambang, DNS gagal, permission salah, konflik port.
 Setiap insiden punya dokumen 16 bagian (gejala → hipotesis → diagnostik →
 root cause → perbaikan → verifikasi → pencegahan) plus runbook cepat, dengan
-54 file bukti eksekusi.
+57 file bukti eksekusi.
 
 **Tiga kontribusi teknis (didukung implementasi nyata):**
 1. Layanan latihan stdlib-only + installer systemd dengan hardening ringan
@@ -105,7 +124,11 @@ hit (retrieved INC-001+INC-005; expected RB-001/INC-004). Analisis: INC-001
 yang ter-retrieve sebenarnya memuat petunjuk reinstall (§14), jadi ekspektasi
 kasus terlalu sempit. Keputusan: **dibiarkan apa adanya** (tidak di-tuning
 setelah melihat hasil) dan didokumentasikan di `E48` + keterbatasan laporan;
-kalibrasi ambang juga dinyatakan bukan set validasi independen.
+kalibrasi ambang juga dinyatakan bukan set validasi independen. Pembelajaran
+tambahan (`E53`): saat mirror EN tak sengaja masuk KB, hit@k bergeser
+0.889 → 1.0 tanpa perubahan kode — bukti bahwa metrik retrieval sensitif
+terhadap komposisi korpus; KB dikunci ke dokumen sumber kebenaran via
+`exclude_globs` (D17) dan baseline 0.889 dikembalikan.
 
 **Satu trade-off untuk wawancara.** Ekstraktif vs generatif (D16): jawaban
 kaku dibanding LLM, tetapi 100% bisa diaudit ke sumber, tidak bisa mengarang

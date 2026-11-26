@@ -114,6 +114,8 @@ bukti.
 | File | Isi | Hasil |
 |---|---|---|
 | `E51-repo-qa-final.txt` | YAML CI valid, grep secret bersih, checklist 7 pertanyaan README, placeholder hanya di template, re-run semua test/lint/evaluasi | semua hijau; 58+43 test; hit@k 0.889; 0 pelanggaran |
+| `E52-docs-recruiter-polish-qa.txt` | QA polish dokumentasi perspektif recruiter: struktur baru README, link antar-file, konsistensi angka + anotasi temuan hit@k=1.0 | struktur 5/5; link rusak 0; temuan KB di-follow-up di E53 |
+| `E53-kb-exclude-globs-sideeffect.txt` | Side effect mirror EN pada KB assistant + perbaikan `exclude_globs` (D17) | baseline kembali: hit@k 0.889, 133/11, 45 test assistant, ruff bersih |
 
 Ringkasan per proyek untuk recruiter & demo: `PORTFOLIO.md` (root).
 Template rubrik manual evaluasi assistant: `assistant/evaluation/rubrik-manual.md`
