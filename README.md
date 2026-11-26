@@ -9,16 +9,21 @@ Tiga komponen:
 1. **IT Support Homelab** (`lab/` + `docs/`) — lingkungan VM terisolasi,
    layanan latihan, dan skenario insiden dengan runbook.
 2. **System Health Monitor** (`monitor/`) — CLI Python yang mengotomasi
-   pemeriksaan baseline. *(planned — Fase 2)*
-3. **AI Helpdesk Assistant** (`assistant/`) — pencarian/pembahasan dari
+   pemeriksaan baseline. *(implemented — Fase 2)*
+3. **AI Helpdesk Assistant** (`assistant/`) — pencarian search-only dari
    runbook dengan kutipan sumber; **tidak pernah mengeksekusi perintah**.
-   *(planned — Fase 3)*
+   *(implemented — Fase 3, Tahap A; adapter model Tahap B planned)*
 
-> **Status jujur per Fase 1 (2026-11-26):** kelima skenario insiden
-> (INC-001–005) berjalan end-to-end dan diuji di sandbox agent (Debian 13
-> + systemd) dengan bukti eksekusi nyata di `docs/evidence/`. Eksekusi di VM
-> milik pemilik repo berstatus *requires manual verification*. Tidak ada klaim
-> pengujian yang belum dijalankan — lihat tabel status di bawah.
+> **Status jujur per Fase 3 (2026-11-26):** ketiga komponen selesai. Fase 1
+> (5/5 insiden), Fase 2 (monitor: 58 unit test + integration + webhook nyata +
+> scheduler), Fase 3 (assistant search-only: 43 unit test + evaluasi 21 kasus
+> tanpa pelanggaran keamanan + server nyata). Semua bukti eksekusi nyata di
+> `docs/evidence/`. Eksekusi di VM milik pemilik repo berstatus *requires
+> manual verification*. Tidak ada klaim pengujian yang belum dijalankan.
+
+> **Bahasa dokumentasi:** dokumen utama bahasa Indonesia. Versi bahasa
+> Inggris tersedia sebagai mirror `*.en.md` — mulai dari **[README.en.md](README.en.md)**.
+> Matriks file terjemahan ada di README.en.md §Documentation languages.
 
 ## Masalah apa yang diselesaikan?
 
@@ -40,9 +45,14 @@ dengan bukti eksekusi nyata, bukan output yang dikarang.
 | INC-003 DNS gagal (Level A: nama `.invalid`, tanpa ubah resolver) | implemented + **tested** (sandbox); Level B (resolver di VM) requires manual verification |
 | INC-004 permission file salah (chmod 000 → restart gagal → pulih) | implemented + **tested** (sandbox); requires manual verification di VM |
 | INC-005 konflik port (squatter lab + kill terverifikasi cmdline) | implemented + **tested** (sandbox); requires manual verification di VM |
+| Monitor: 5 check (disk/service/DNS/TCP/HTTP) + config tervalidasi | implemented + **tested** (58 unit test, integration lokal) |
+| Monitor: exit code 0/1/2, JSON + teks, timestamp timezone | implemented + **tested** |
+| Monitor: webhook alert (env-based, dedup, retry) | implemented + **tested** + bukti kirim nyata |
+| Monitor: logging JSON + rotasi, scheduler systemd timer | implemented; unit diverifikasi; periodik di VM = requires manual verification |
+| Assistant: KB builder eksplisit + BM25 search-only + citation tervalidasi | implemented + **tested** (43 unit test; evaluasi 21 kasus) |
+| Assistant: abstain out-of-scope + label query injection + UI lokal | implemented + **tested** (+ server nyata) |
+| Assistant: adapter model Tahap B (lokal/API) | planned (interface siap; menolak berjalan eksplisit) |
 | Eksekusi panduan setup VM VMware + Ubuntu 24.04 di VM pemilik repo | requires manual verification |
-| Fase 2: `monitor/` (Python, pytest, JSON, notifikasi) | planned |
-| Fase 3: `assistant/` (retrieval runbook + kutipan, mode offline) | planned |
 
 Definisi status: `docs/security/safety-rules.md` §3.
 
@@ -79,14 +89,52 @@ Tanpa VM (host Linux dengan systemd) langkahnya sama. Konfigurasi baseline
 lewat environment variable — lihat header `lab/scripts/baseline.sh`.
 Teardown: `docs/setup/teardown.md`.
 
+### Monitor (Fase 2)
+
+```bash
+cd ~/it-operations-ai-lab
+python3 -m venv .venv
+.venv/bin/pip install -e 'monitor[dev]'
+cp monitor/config.example.json monitor/config.json   # sesuaikan bila perlu
+.venv/bin/lab-monitor --config monitor/config.json   # laporan teks, exit 0/1/2
+```
+
+Detail (referensi config, webhook, scheduler systemd timer):
+`monitor/README.md`.
+
+### Assistant (Fase 3, search-only)
+
+```bash
+cd ~/it-operations-ai-lab
+python3 -m venv .venv
+.venv/bin/pip install -e 'assistant[dev]'
+.venv/bin/lab-assist query "layanan demo-http berhenti bagaimana diagnosisnya?"
+.venv/bin/lab-assist serve                # UI lokal http://127.0.0.1:8077
+python3 assistant/evaluation/evaluate.py  # laporan evaluasi (report.md)
+```
+
+Jawaban ekstraktif dari runbook dengan kutipan sumber; abstain bila
+dokumentasi tidak mencakup; tidak mengeksekusi perintah. Detail:
+`assistant/README.md`. Template rubrik penilaian manual:
+`assistant/evaluation/rubrik-manual.md` (belum diisi → requires manual
+verification).
+
 ## Bagaimana menguji dan mereproduksi insiden?
 
-- Sintaks & kompilasi: `bash -n lab/scripts/*.sh`,
-  `python3 -m py_compile lab/services/demo-http/demo_http_server.py`.
-- Reproduksi INC-001: enam perintah di quick start di atas.
-- Pengujian monitor (pytest) menyusul di Fase 2; CI (lint + unit test tanpa
-  internet/secret) ditambahkan bersama Fase 2 agar tidak ada workflow yang
-  "hijau tanpa memeriksa perilaku penting".
+- Homelab: `bash -n lab/scripts/*.sh` (sintaks) + enam perintah quick start
+  di atas untuk mereproduksi INC-001.
+- Monitor unit test (deterministik, mock, tanpa internet/VM):
+  `python3 -m pytest monitor/tests` → 58 lulus.
+- Monitor integration lokal (butuh demo-http aktif):
+  `python3 -m pytest monitor/tests -m integration`.
+- Assistant unit test: `python3 -m pytest assistant/tests` → 43 lulus.
+- Assistant evaluasi: `python3 assistant/evaluation/evaluate.py` → 21 kasus,
+  laporan di `assistant/evaluation/report.md`.
+- Lint: `ruff check` untuk monitor & assistant → bersih.
+- CI: `.github/workflows/ci.yml` menjalankan ruff + unit test kedua package +
+  evaluasi assistant pada Python 3.12 (tanpa secret, tanpa internet, integration
+  test dikecualikan). CI berjalan setelah repo di-push — requires manual
+  verification.
 
 ## Di mana bukti / demo?
 
@@ -106,9 +154,20 @@ Sorotan:
 | `E18`–`E20` | INC-003: DNS gagal (exit 1) → diagnostik rc=2 vs rc=0 → pulih (exit 0) |
 | `E21`–`E26` | INC-004: chmod 000 → `Errno 13` + `status=2` → unit failed → pulih (exit 0) |
 | `E27`–`E33` | INC-005: squatter port → gejala penipu (service FAIL, tcp/http OK) → `Errno 98` → kill terverifikasi → pulih (exit 0) |
+| `E33b` | integration test monitor terhadap lab lokal: 1 lulus |
+| `E34` / `E35` | monitor: 58 unit test lulus; ruff bersih |
+| `E36` / `E37` / `E38` | monitor: CLI sehat exit 0, JSON timezone, config invalid exit 2 |
+| `E39` / `E40` | monitor: webhook nyata — terkirim + dedup (1 POST) / mode kegagalan (health tetap utuh) |
+| `E41` | alur homelab lengkap: sehat → gangguan → monitor exit 1 → pulih → exit 0 |
+| `E42` | scheduler: `systemd-analyze verify` lulus + trigger nyata service (journalctl + log JSON) |
+| `E43`–`E44` | assistant: 43 unit test lulus; ruff bersih |
+| `E45`–`E47` | assistant CLI: query answered + citation, abstain out-of-scope, injection → safety_note |
+| `E48` | evaluasi 21 kasus: hit@k 0.889, citation 1.0, abstain 1.0, safety 1.0, latensi p50/p95 dilaporkan |
+| `E49`–`E50` | KB 133 chunks/11 dokumen (explicit dirs); server FastAPI nyata (health/query/abstain/batasan/UI relatif) |
 
 Diagram arsitektur & jaringan: `docs/architecture/` (Mermaid + SVG).
 Keputusan teknis & trade-off: `docs/architecture/decisions.md`.
+Ringkasan per proyek untuk recruiter + peta bukti cepat: `PORTFOLIO.md`.
 
 ## Prasyarat
 
@@ -141,20 +200,22 @@ Keputusan teknis & trade-off: `docs/architecture/decisions.md`.
    sehat. Narasikan hipotesis saat gejala muncul.
 4. **2 menit** — buka INC-001 §17: contoh kegagalan nyata (Access denied
    tanpa sudo) dan bagaimana dianalisis/diperbaiki.
-5. **2 menit** — jelaskan keputusan teknis yang paling menantang (D6
-   `Restart=on-failure` vs `always`; D7 bash vs Python; D8 hardening) dan
-   roadmap Fase 2/3 (monitor + retrieval grounded, tanpa eksekusi perintah).
+5. **2 menit** — assistant live: `lab-assist query "layanan demo-http berhenti"`
+   (jawaban + citation) → `lab-assist query "cara setup kubernetes"` (abstain
+   jujur) → query injection (safety_note). Tekankan: tidak mengeksekusi
+   perintah, citation bisa dibuka di repo.
+6. **2 menit** — jelaskan keputusan teknis paling menantang (D6
+   `Restart=on-failure` vs `always`; D14 dua signature kegagalan systemd;
+   D16 jawaban ekstraktif vs generatif + kalibrasi ambang abstain) dan
+   roadmap VM verification + Tahap B.
 
 ## Roadmap
 
-- **Fase 2:** `monitor/` CLI Python (disk/service/DNS/TCP/HTTP), konfigurasi
-  tervalidasi, JSON + logging terstruktur, adapter webhook (off default),
-  pytest deterministik + integration test terpisah, scheduler 1 platform,
-  CI lint/unit-test.
-- **Fase 3:** `assistant/` search-only (TF-IDF/BM25) atas runbook dengan
-  metadata chunk + citation, kasus uji 20+ (termasuk prompt injection),
-  laporan evaluasi (hit rate, validitas kutipan, abstain, latensi p50/p95),
-  adapter model lokal/API setelah retrieval teruji.
+- Eksekusi panduan VM di host Windows Anda + verifikasi ulang alur insiden,
+  monitor, dan assistant di VM (mengganti status requires manual verification).
+- Assistant Tahap B: satu adapter provider (lokal/API) dengan config biaya
+  eksplisit dari sumber resmi (model, tarif, tanggal) + pelaporan token dari
+  response provider; mode offline tetap fungsional.
 - INC-003 Level B (memutus resolver di VM disposable) sebagai pelengkap
   Level A yang sudah teruji.
 

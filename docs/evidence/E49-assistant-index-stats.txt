@@ -1,0 +1,29 @@
+# ============================================================
+# BUKTI AKTUAL — E49: statistik knowledge base (corpus nyata repo)
+# Lingkungan: sandbox agent (lihat E00)
+# Tanggal (UTC): 2026-11-26T12:38:02+00:00
+# Perintah: lab-assist index-stats
+# ============================================================
+{
+  "chunks": 133,
+  "documents": 11,
+  "doc_ids": [
+    "INC-001",
+    "INC-002",
+    "INC-003",
+    "INC-004",
+    "INC-005",
+    "RB-001",
+    "RB-002",
+    "RB-003",
+    "RB-004",
+    "RB-005",
+    "README"
+  ],
+  "allowed_dirs": [
+    "/home/user/it-operations-ai-lab/docs/runbooks",
+    "/home/user/it-operations-ai-lab/docs/incidents"
+  ],
+  "excluded_hidden_files": 0
+}
+exit_code=0

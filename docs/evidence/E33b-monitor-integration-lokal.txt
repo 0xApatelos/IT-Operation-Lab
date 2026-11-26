@@ -1,0 +1,10 @@
+# ============================================================
+# BUKTI AKTUAL — E33b: integration test monitor terhadap lab lokal (opt-in, eksplisit)
+# Lingkungan: sandbox agent (lihat E00); demo-http di-install ulang dulu (sandbox direstart antar sesi)
+# Tanggal (UTC): 2026-11-26T12:14:58+00:00
+# Perintah: python3 -m pytest monitor/tests -m integration -v
+# ============================================================
+
+monitor/tests/test_integration_local.py::test_monitor_against_local_lab PASSED [100%]
+
+======================= 1 passed, 58 deselected in 0.06s =======================

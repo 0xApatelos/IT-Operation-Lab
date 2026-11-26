@@ -1,0 +1,39 @@
+# ============================================================
+# BUKTI AKTUAL — E39: webhook alert NYATA — terkirim + dedup berfungsi
+# Lingkungan: sandbox agent (lihat E00)
+# Tanggal (UTC): 2026-11-26T12:15:59+00:00
+# Setup: receiver HTTP lokal di 127.0.0.1:9099 (menyimpan POST ke /tmp/hook-received.json);
+#        config monitor: tcp ke port tertutup (pasti fail) + service demo-http; webhook_enabled=true
+# Perintah: eksekusi monitor DUA kali berurutan dengan LAB_WEBHOOK_URL ter-set;
+#           eksekusi ke-2 harus dilewati oleh dedup (receiver hanya menerima 1 POST)
+# ============================================================
+--- eksekusi 1 (alert harus terkirim):
+[2026-11-26 12:15:59,750] INFO monitor mulai: config=/tmp/monitor-hook.json checks=2
+[2026-11-26 12:15:59,768] INFO alert terkirim ke webhook (1 check unhealthy)
+[2026-11-26 12:15:59,768] INFO monitor selesai: overall=unhealthy exit=1 durasi=8ms
+monitor 0.1.0 @ e2b.local — 2026-11-26T12:15:59+00:00
+  FAIL         tcp-closed-probe           127.0.0.1:9999: connection refused
+  OK           service-demo-http          demo-http: active
+  ringkasan: ok=1 warn=0 fail=1 unsupported=0 unknown=0 | unhealthy | exit=1
+  durasi: 8 ms
+exit_code_1=1
+
+--- eksekusi 2 (dalam jendela dedup 60s -> alert DILEWATI):
+[2026-11-26 12:15:59,867] INFO monitor mulai: config=/tmp/monitor-hook.json checks=2
+[2026-11-26 12:15:59,881] INFO alert untuk e2b.local:tcp-closed-probe:fail dilewati (dedup 60s)
+[2026-11-26 12:15:59,881] INFO monitor selesai: overall=unhealthy exit=1 durasi=14ms
+monitor 0.1.0 @ e2b.local — 2026-11-26T12:15:59+00:00
+  FAIL         tcp-closed-probe           127.0.0.1:9999: connection refused
+  OK           service-demo-http          demo-http: active
+  ringkasan: ok=1 warn=0 fail=1 unsupported=0 unknown=0 | unhealthy | exit=1
+  durasi: 14 ms
+exit_code_2=1
+
+--- state file dedup:
+{
+  "e2b.local:tcp-closed-probe:fail": 1795695359.7583852
+}
+--- payload yang DITERIMA receiver (jumlah separator = jumlah POST):
+jumlah POST diterima: 1 (diharapkan 1 — eksekusi ke-2 didedup)
+{"monitor_version": "0.1.0", "host": "e2b.local", "started_at": "2026-11-26T12:15:59+00:00", "overall": "unhealthy", "failing": [{"name": "tcp-closed-probe", "check_type": "tcp", "target": "127.0.0.1:9999", "status": "fail", "duration_ms": 1, "detail": "127.0.0.1:9999: connection refused"}]}
+---SEPARATOR---

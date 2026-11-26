@@ -1,0 +1,102 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="980" height="600" viewBox="0 0 980 600" font-family="system-ui, -apple-system, Segoe UI, sans-serif">
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#35659C"/>
+    </marker>
+    <marker id="arrowRed" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#B03A3A"/>
+    </marker>
+  </defs>
+
+  <style>
+    .box   { fill:#FFFFFF; stroke:#35659C; stroke-width:1.5; rx:8; }
+    .zone  { fill:#F5F8FC; stroke:#35659C; stroke-width:1.5; stroke-dasharray:6 4; }
+    .green { fill:#E4F4EA; stroke:#2F7D4F; stroke-width:1.5; }
+    .red   { fill:#FDECEC; stroke:#B03A3A; stroke-width:1.5; stroke-dasharray:5 4; }
+    .title { font-size:19px; font-weight:700; fill:#1F2A3A; }
+    .sub   { font-size:12px; fill:#5A6B80; }
+    .h     { font-size:13.5px; font-weight:700; fill:#1F2A3A; }
+    .t     { font-size:12px; fill:#33465E; }
+    .lbl   { font-size:11.5px; fill:#35659C; }
+    .lblR  { font-size:11.5px; fill:#B03A3A; }
+    .line  { stroke:#35659C; stroke-width:1.6; fill:none; }
+    .lineR { stroke:#B03A3A; stroke-width:1.6; fill:none; stroke-dasharray:6 4; }
+  </style>
+
+  <rect x="0" y="0" width="980" height="600" fill="#FFFFFF"/>
+  <text x="24" y="34" class="title">Lab Network Diagram — IT Support Homelab (Phase 1)</text>
+  <text x="24" y="56" class="sub">All IP addresses are EXAMPLES — verify the real ones: ipconfig (Windows, VMnet1 adapter) and ip -br a (VM)</text>
+
+  <!-- Windows host -->
+  <rect x="20" y="72" width="940" height="210" rx="10" fill="#EAF2FB" stroke="#35659C" stroke-width="1.5"/>
+  <text x="36" y="98" class="h">Windows host 10/11 — VMware Workstation Pro (hypervisor)</text>
+
+  <!-- admin box -->
+  <rect x="40" y="116" width="250" height="90" rx="8" class="green"/>
+  <text x="54" y="140" class="h">Lab operator</text>
+  <text x="54" y="160" class="t">browser · PowerShell · ssh</text>
+  <text x="54" y="178" class="t">Test-NetConnection 192.168.200.10</text>
+  <text x="54" y="196" class="sub">(EXAMPLE IP)</text>
+
+  <!-- VMnet1 -->
+  <rect x="330" y="116" width="300" height="90" rx="8" class="box" fill="#FFFFFF"/>
+  <text x="344" y="140" class="h">VMnet1 — host-only</text>
+  <text x="344" y="160" class="t">EXAMPLE subnet: 192.168.200.0/24</text>
+  <text x="344" y="178" class="t">host adapter EXAMPLE: 192.168.200.1</text>
+  <text x="344" y="196" class="sub">lab-only, no internet route</text>
+
+  <!-- VMnet8 -->
+  <rect x="670" y="116" width="270" height="90" rx="8" class="red"/>
+  <text x="684" y="140" class="h">VMnet8 — NAT</text>
+  <text x="684" y="160" class="t">outbound only (apt update, DNS)</text>
+  <text x="684" y="178" class="t">no inbound port-forwarding</text>
+  <text x="684" y="196" class="sub">gateway to the internet</text>
+
+  <!-- VM zone -->
+  <rect x="150" y="360" width="520" height="185" rx="10" class="zone"/>
+  <text x="166" y="386" class="h">VM Ubuntu Server 24.04 LTS</text>
+  <text x="166" y="404" class="sub">EXAMPLE IP: 192.168.200.10/24 (static via netplan) · 2 vCPU · 2 GB RAM · 25 GB disk</text>
+
+  <!-- service box -->
+  <rect x="175" y="420" width="300" height="92" rx="8" class="green"/>
+  <text x="189" y="444" class="h">demo-http.service (systemd)</text>
+  <text x="189" y="464" class="t">python3 demo_http_server.py</text>
+  <text x="189" y="482" class="t">listen 0.0.0.0:8080 · demo-http system user</text>
+  <text x="189" y="500" class="t">GET /health → 200 JSON</text>
+
+  <!-- ssh box -->
+  <rect x="495" y="420" width="155" height="92" rx="8" class="box"/>
+  <text x="507" y="444" class="h">openssh-server</text>
+  <text x="507" y="464" class="t">port :22</text>
+  <text x="507" y="482" class="t">optional, lab-only</text>
+  <text x="507" y="500" class="sub">for scp/repo transfer</text>
+
+  <!-- arrows host row -->
+  <path d="M290 161 L325 161" class="line" marker-end="url(#arrow)"/>
+  <text x="296" y="152" class="lbl">HTTP·SSH</text>
+
+  <!-- admin -> VM -->
+  <path d="M165 206 L165 330 L230 360" class="line" marker-end="url(#arrow)"/>
+  <text x="24" y="300" class="lbl">host-only lab traffic</text>
+  <text x="24" y="316" class="lbl">HTTP :8080 · SSH :22</text>
+
+  <!-- VMnet1 -> VM -->
+  <path d="M480 206 L480 355" class="line" marker-end="url(#arrow)"/>
+  <text x="486" y="285" class="lbl">host ↔ VM bridge</text>
+
+  <!-- VM -> VMnet8 -> Internet -->
+  <path d="M670 430 L790 430 L805 340 L805 212" class="lineR" marker-end="url(#arrowRed)"/>
+  <text x="700" y="452" class="lblR">outbound only via NAT (apt update · DNS)</text>
+
+  <!-- Internet cloud -->
+  <ellipse cx="805" cy="160" rx="75" ry="34" class="red" fill="#FDECEC"/>
+  <text x="805" y="166" text-anchor="middle" class="h">Internet</text>
+
+  <!-- legend -->
+  <rect x="24" y="528" width="932" height="48" rx="8" fill="#F7F7F5" stroke="#C9C9C4"/>
+  <line x1="44" y1="546" x2="84" y2="546" class="line" marker-end="url(#arrow)"/>
+  <text x="92" y="550" class="t">lab traffic (host-only, trusted for practice only)</text>
+  <line x1="470" y1="546" x2="510" y2="546" class="lineR" marker-end="url(#arrowRed)"/>
+  <text x="518" y="550" class="t">outbound via NAT — no inbound from the internet</text>
+  <text x="44" y="568" class="sub">Trust boundaries &amp; safety rules: docs/security/safety-rules.en.md · No port is exposed to the internet</text>
+</svg>

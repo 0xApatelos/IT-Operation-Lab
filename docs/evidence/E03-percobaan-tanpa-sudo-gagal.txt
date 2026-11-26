@@ -1,0 +1,11 @@
+# ============================================================
+# BUKTI AKTUAL — E03: simulasi terkontrol 'layanan berhenti' (INC-001)
+# Lingkungan: sandbox agent (lihat E00)
+# Tanggal (UTC): 2026-11-25T17:53:19+00:00
+# Perintah: bash lab/scripts/simulate_service_down.sh --yes
+# Catatan: flag --yes dipakai karena eksekusi ini non-interaktif; tanpa flag, skrip meminta konfirmasi 'ya'
+# ============================================================
+[2026-11-25T17:53:19+0000] menyimulasikan insiden: systemctl stop demo-http
+Failed to stop demo-http.service: Access denied
+See system logs and 'systemctl status demo-http.service' for details.
+exit_code=4

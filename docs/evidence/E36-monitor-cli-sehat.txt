@@ -1,0 +1,16 @@
+# ============================================================
+# BUKTI AKTUAL — E36: lab-monitor laporan SEHAT terhadap lab lokal (exit 0)
+# Lingkungan: sandbox agent (lihat E00); demo-http aktif
+# Tanggal (UTC): 2026-11-26T12:14:59+00:00
+# Perintah: python3 -m monitor_lab --config monitor/config.example.json --format text ; echo exit_code=$?
+# Catatan: config.example.json dipakai langsung (tanpa alerts aktif); log ke runtime/monitor.log
+# ============================================================
+monitor 0.1.0 @ e2b.local — 2026-11-26T12:15:00+00:00
+  OK           disk-root                  /: 16.9% used (4.1 GiB/24.4 GiB), thresholds warn 80% crit 90% -> ok
+  OK           service-demo-http          demo-http: active
+  OK           dns-archive                archive.ubuntu.com -> 185.125.190.81, 185.125.190.82, 185.125.190.83 (+15 lain) (18 alamat)
+  OK           tcp-demo-http              127.0.0.1:8080 terhubung
+  OK           http-demo-health           GET http://127.0.0.1:8080/health -> 200
+  ringkasan: ok=5 warn=0 fail=0 unsupported=0 unknown=0 | healthy | exit=0
+  durasi: 16 ms
+exit_code=0

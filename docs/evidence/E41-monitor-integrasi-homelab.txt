@@ -1,0 +1,56 @@
+# ============================================================
+# BUKTI AKTUAL — E41: INTEGRASI HOMELAB — baseline sehat -> gangguan terkontrol ->
+# monitor mendeteksi -> perbaikan manual -> monitor sehat kembali
+# Lingkungan: sandbox agent (lihat E00)
+# Tanggal (UTC): 2026-11-26T12:16:25+00:00
+# Perintah per tahap (berurutan):
+#   1. python3 -m monitor_lab --config monitor/config.example.json --format text   (harap exit 0)
+#   2. sudo bash lab/scripts/simulate_service_down.sh --yes                          (gangguan terkontrol)
+#   3. python3 -m monitor_lab --config monitor/config.example.json --format text   (harap exit 1)
+#   4. sudo bash lab/scripts/recover_service.sh                                     (perbaikan manual)
+#   5. python3 -m monitor_lab --config monitor/config.example.json --format text   (harap exit 0)
+# ============================================================
+--- TAHAP 1: baseline sehat (monitor)
+monitor 0.1.0 @ e2b.local — 2026-11-26T12:16:25+00:00
+  OK           disk-root                  /: 16.9% used (4.1 GiB/24.4 GiB), thresholds warn 80% crit 90% -> ok
+  OK           service-demo-http          demo-http: active
+  OK           dns-archive                archive.ubuntu.com -> 185.125.190.81, 185.125.190.82, 185.125.190.83 (+15 lain) (18 alamat)
+  OK           tcp-demo-http              127.0.0.1:8080 terhubung
+  OK           http-demo-health           GET http://127.0.0.1:8080/health -> 200
+  ringkasan: ok=5 warn=0 fail=0 unsupported=0 unknown=0 | healthy | exit=0
+  durasi: 19 ms
+exit_tahap1=0
+
+--- TAHAP 2: gangguan terkontrol (INC-001)
+[2026-11-26T12:16:25+0000] menyimulasikan insiden: systemctl stop demo-http
+[2026-11-26T12:16:25+0000] status layanan kini: inactive (diharapkan: inactive)
+[2026-11-26T12:16:25+0000] gejala dapat diamati dengan: lab/scripts/baseline.sh  (harap exit 1)
+[2026-11-26T12:16:25+0000] pemulihan: lab/scripts/recover_service.sh
+exit_tahap2=0
+
+--- TAHAP 3: monitor mendeteksi
+monitor 0.1.0 @ e2b.local — 2026-11-26T12:16:25+00:00
+  OK           disk-root                  /: 16.9% used (4.1 GiB/24.4 GiB), thresholds warn 80% crit 90% -> ok
+  FAIL         service-demo-http          demo-http: status=inactive (diharapkan active)
+  OK           dns-archive                archive.ubuntu.com -> 185.125.190.81, 185.125.190.82, 185.125.190.83 (+15 lain) (18 alamat)
+  FAIL         tcp-demo-http              127.0.0.1:8080: connection refused
+  FAIL         http-demo-health           GET http://127.0.0.1:8080/health: connection refused
+  ringkasan: ok=2 warn=0 fail=3 unsupported=0 unknown=0 | unhealthy | exit=1
+  durasi: 18 ms
+exit_tahap3=1
+
+--- TAHAP 4: perbaikan manual
+[2026-11-26T12:16:25+0000] memulihkan: systemctl start demo-http
+[2026-11-26T12:16:26+0000] pemulihan TERVERIFIKASI: service aktif + GET /health 200 (percobaan ke-2)
+exit_tahap4=0
+
+--- TAHAP 5: monitor sehat kembali
+monitor 0.1.0 @ e2b.local — 2026-11-26T12:16:26+00:00
+  OK           disk-root                  /: 16.9% used (4.1 GiB/24.4 GiB), thresholds warn 80% crit 90% -> ok
+  OK           service-demo-http          demo-http: active
+  OK           dns-archive                archive.ubuntu.com -> 185.125.190.81, 185.125.190.82, 185.125.190.83 (+15 lain) (18 alamat)
+  OK           tcp-demo-http              127.0.0.1:8080 terhubung
+  OK           http-demo-health           GET http://127.0.0.1:8080/health -> 200
+  ringkasan: ok=5 warn=0 fail=0 unsupported=0 unknown=0 | healthy | exit=0
+  durasi: 16 ms
+exit_tahap5=0

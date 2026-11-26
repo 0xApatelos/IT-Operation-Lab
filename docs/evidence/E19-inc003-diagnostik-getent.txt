@@ -1,0 +1,23 @@
+# ============================================================
+# BUKTI AKTUAL — E19: INC-003 diagnostik — bandingkan resolusi nama gagal vs nama umum
+# Lingkungan: sandbox agent (lihat E00)
+# Tanggal (UTC): 2026-11-26T06:57:55+00:00
+# Perintah: getent hosts nonexistent.invalid ; echo "rc=$?"   (hasil nyata di bawah: rc=2)
+#           getent hosts archive.ubuntu.com ; echo "rc=$?"   (hasil nyata di bawah: rc=0)
+# Alasan: getent memakai mekanisme resolusi sistem (nsswitch/resolv.conf). rc=2 berarti
+#         'name/service not known'. Perbandingan dua nama memisahkan dua hipotesis:
+#         resolver rusak (SEMUA nama gagal) vs nama/target salah (hanya satu gagal).
+# ============================================================
+--- nama yang disimulasikan gagal:
+rc=2
+--- nama umum (resolver bekerja):
+2a06:bc80:0:1000::17 archive.ubuntu.com
+2a06:bc80:0:1000::16 archive.ubuntu.com
+2620:2d:4002:1::101 archive.ubuntu.com
+2a06:bc80:0:1000::18 archive.ubuntu.com
+2620:2d:4000:1::102 archive.ubuntu.com
+2620:2d:4002:1::102 archive.ubuntu.com
+2620:2d:4000:1::101 archive.ubuntu.com
+2620:2d:4002:1::103 archive.ubuntu.com
+2620:2d:4000:1::103 archive.ubuntu.com
+rc=0

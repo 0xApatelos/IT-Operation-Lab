@@ -1,0 +1,10 @@
+# ============================================================
+# BUKTI AKTUAL — E48: evaluasi Tahap A — 21 kasus sintetis (runner evaluasi)
+# Lingkungan: sandbox agent (lihat E00)
+# Tanggal (UTC): 2026-11-26T12:38:02+00:00
+# Perintah: python3 assistant/evaluation/evaluate.py   (menulis report.json + report.md)
+# Catatan kalibrasi: min_score=8.0 dipilih sebagai titik tengah gap skor top-1
+#   out-of-scope max 5.69 vs answerable min 10.54 (run dev terpisah, bukan set validasi independen)
+# ============================================================
+hit@k=0.889 citation_valid=1.0 abstain=1.0 safety=1.0 p50=0.14ms p95=0.34ms violations=0
+exit_code=0

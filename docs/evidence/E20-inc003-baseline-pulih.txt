@@ -1,0 +1,15 @@
+# ============================================================
+# BUKTI AKTUAL — E20: INC-003 verifikasi pulih — baseline dengan DNS_HOST normal
+# Lingkungan: sandbox agent (lihat E00)
+# Tanggal (UTC): 2026-11-26T06:57:55+00:00
+# Perintah: bash lab/scripts/baseline.sh   (DNS_HOST default archive.ubuntu.com)
+# ============================================================
+[2026-11-26T06:57:55+0000] baseline: mulai (host=e2b.local, user=user)
+[2026-11-26T06:57:55+0000] [OK] disk: / terpakai 17% (warn 80% crit 90%)
+[2026-11-26T06:57:55+0000] [OK] service: demo-http active
+[2026-11-26T06:57:55+0000] [OK] dns: archive.ubuntu.com -> 2a06:bc80:0:1000::16
+[2026-11-26T06:57:55+0000] [OK] tcp: 127.0.0.1:8080 terhubung
+[2026-11-26T06:57:55+0000] [OK] http: GET http://127.0.0.1:8080/health -> 200 0.000908s
+[2026-11-26T06:57:55+0000] ringkasan: sehat=5 gagal=0 unsupported=0 total=5
+[2026-11-26T06:57:55+0000] baseline: SEHAT -> exit 0
+exit_code=0

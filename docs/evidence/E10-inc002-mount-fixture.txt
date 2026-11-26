@@ -1,0 +1,14 @@
+# ============================================================
+# BUKTI AKTUAL — E10: INC-002 mount fixture tmpfs disposable 32 MB (kosong)
+# Lingkungan: sandbox agent (lihat E00)
+# Tanggal (UTC): 2026-11-26T06:56:07+00:00
+# Perintah: sudo bash lab/scripts/simulate_disk_pressure.sh --yes --mount-only
+# Catatan: filesystem DISPOSABLE di RAM — root filesystem tidak tersentuh
+# ============================================================
+[2026-11-26T06:56:07+0000] tmpfs 32 MB di-mount pada /mnt/lab-disk-fixture
+[2026-11-26T06:56:07+0000] [OK] fixture siap (kosong). df -P /mnt/lab-disk-fixture:
+Filesystem     1024-blocks  Used Available Capacity Mounted on
+tmpfs                32768     0     32768       0% /mnt/lab-disk-fixture
+exit_code=0
+--- findmnt:
+tmpfs /mnt/lab-disk-fixture tmpfs   32M

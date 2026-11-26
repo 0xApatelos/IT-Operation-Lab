@@ -1,0 +1,61 @@
+# ============================================================
+# BUKTI AKTUAL — E30: INC-005 diagnostik — status unit, journald, pemilik port, cmdline proses
+# Lingkungan: sandbox agent (lihat E00)
+# Tanggal (UTC): 2026-11-26T10:26:17+00:00
+# Perintah: systemctl status demo-http --no-pager -l
+#           sudo journalctl -u demo-http --no-pager -n 30
+#           sudo ss -ltnp '( sport = :8080 )'
+#           tr '\0' ' ' < /proc/$(cat lab/runtime/port-squatter.pid)/cmdline
+# Alasan: status menunjukkan unit tidak aktif (state 'activating' = auto-restart); journald
+#         menunjukkan penyebab (bind: Address already in use + jadwal restart); ss mengungkap
+#         PID pemilik port; /proc/<pid>/cmdline mengidentifikasi PROSES itu apa — kunci
+#         untuk membedakan 'instance liar' vs unit systemd
+# ============================================================
+--- systemctl status:
+● demo-http.service - demo-http - layanan HTTP latihan lab (IT operations portfolio)
+     Loaded: loaded (/etc/systemd/system/demo-http.service; enabled; preset: enabled)
+     Active: activating (auto-restart) (Result: exit-code) since Thu 2026-11-26 10:26:16 UTC; 633ms ago
+ Invocation: 666d1c9affad4624a309c912dd6c8f1a
+    Process: 2720 ExecStart=/usr/local/bin/python3 /opt/demo-http/demo_http_server.py --bind 0.0.0.0 --port 8080 (code=exited, status=1/FAILURE)
+   Main PID: 2720 (code=exited, status=1/FAILURE)
+   Mem peak: 10.9M
+        CPU: 80ms
+--- journalctl:
+Nov 26 10:26:14 e2b.local python3[2716]:     ~~~~~~~~~~~~~~~~^^
+Nov 26 10:26:14 e2b.local python3[2716]:   File "/usr/local/lib/python3.13/http/server.py", line 140, in server_bind
+Nov 26 10:26:14 e2b.local python3[2716]:     socketserver.TCPServer.server_bind(self)
+Nov 26 10:26:14 e2b.local python3[2716]:     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+Nov 26 10:26:14 e2b.local python3[2716]:   File "/usr/local/lib/python3.13/socketserver.py", line 478, in server_bind
+Nov 26 10:26:14 e2b.local python3[2716]:     self.socket.bind(self.server_address)
+Nov 26 10:26:14 e2b.local python3[2716]:     ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+Nov 26 10:26:14 e2b.local python3[2716]: OSError: [Errno 98] Address already in use
+Nov 26 10:26:14 e2b.local systemd[1]: demo-http.service: Main process exited, code=exited, status=1/FAILURE
+Nov 26 10:26:14 e2b.local systemd[1]: demo-http.service: Failed with result 'exit-code'.
+Nov 26 10:26:16 e2b.local systemd[1]: demo-http.service: Scheduled restart job, restart counter is at 12.
+Nov 26 10:26:16 e2b.local systemd[1]: Started demo-http.service - demo-http - layanan HTTP latihan lab (IT operations portfolio).
+Nov 26 10:26:16 e2b.local python3[2720]: Traceback (most recent call last):
+Nov 26 10:26:16 e2b.local python3[2720]:   File "/opt/demo-http/demo_http_server.py", line 83, in <module>
+Nov 26 10:26:16 e2b.local python3[2720]:     sys.exit(main())
+Nov 26 10:26:16 e2b.local python3[2720]:              ~~~~^^
+Nov 26 10:26:16 e2b.local python3[2720]:   File "/opt/demo-http/demo_http_server.py", line 71, in main
+Nov 26 10:26:16 e2b.local python3[2720]:     server = ThreadingHTTPServer((args.bind, args.port), build_handler())
+Nov 26 10:26:16 e2b.local python3[2720]:   File "/usr/local/lib/python3.13/socketserver.py", line 457, in __init__
+Nov 26 10:26:16 e2b.local python3[2720]:     self.server_bind()
+Nov 26 10:26:16 e2b.local python3[2720]:     ~~~~~~~~~~~~~~~~^^
+Nov 26 10:26:16 e2b.local python3[2720]:   File "/usr/local/lib/python3.13/http/server.py", line 140, in server_bind
+Nov 26 10:26:16 e2b.local python3[2720]:     socketserver.TCPServer.server_bind(self)
+Nov 26 10:26:16 e2b.local python3[2720]:     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+Nov 26 10:26:16 e2b.local python3[2720]:   File "/usr/local/lib/python3.13/socketserver.py", line 478, in server_bind
+Nov 26 10:26:16 e2b.local python3[2720]:     self.socket.bind(self.server_address)
+Nov 26 10:26:16 e2b.local python3[2720]:     ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+Nov 26 10:26:16 e2b.local python3[2720]: OSError: [Errno 98] Address already in use
+Nov 26 10:26:16 e2b.local systemd[1]: demo-http.service: Main process exited, code=exited, status=1/FAILURE
+Nov 26 10:26:16 e2b.local systemd[1]: demo-http.service: Failed with result 'exit-code'.
+--- pemilik port 8080:
+State  Recv-Q Send-Q Local Address:Port Peer Address:PortProcess                           
+LISTEN 0      5            0.0.0.0:8080      0.0.0.0:*    users:(("python3",pid=2643,fd=3))
+--- cmdline proses pemilik port (squatter):
+PID tercatat: 2643
+python3 -u /opt/demo-http/demo_http_server.py --port 8080 
+--- main PID milik unit (untuk perbandingan; unit sedang tidak aktif):
+MainPID=0

@@ -1,0 +1,15 @@
+# ============================================================
+# BUKTI AKTUAL — E14: INC-002 diagnostik — df/du/ls pada path bermasalah
+# Lingkungan: sandbox agent (lihat E00)
+# Tanggal (UTC): 2026-11-26T06:56:59+00:00
+# Perintah: df -h /mnt/lab-disk-fixture ; du -sh /mnt/lab-disk-fixture/* ; ls -lh /mnt/lab-disk-fixture
+# Alasan: df menunjukkan kapasitas/pemakaian per filesystem; du mengungkap direktori/file
+#         terbesar; ls mengonfirmasi nama file penyebab
+# ============================================================
+Filesystem      Size  Used Avail Use% Mounted on
+tmpfs            32M   28M  4.0M  88% /mnt/lab-disk-fixture
+--- du:
+28M	/mnt/lab-disk-fixture/lab-fill.bin
+--- ls:
+total 28M
+-rw-r--r-- 1 root root 28M Nov 26 06:56 lab-fill.bin

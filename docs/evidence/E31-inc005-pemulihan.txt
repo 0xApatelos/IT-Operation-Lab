@@ -1,0 +1,13 @@
+# ============================================================
+# BUKTI AKTUAL — E31: INC-005 pemulihan — kill squatter terverifikasi + start unit
+# Lingkungan: sandbox agent (lihat E00)
+# Tanggal (UTC): 2026-11-26T10:26:17+00:00
+# Perintah: sudo bash lab/scripts/recover_service_port.sh
+# ============================================================
+[2026-11-26T10:26:17+0000] unit demo-http dihentikan (membatalkan siklus auto-restart bila ada)
+[2026-11-26T10:26:17+0000] verifikasi cmdline PID 2643: python3 -u /opt/demo-http/demo_http_server.py --port 8080 
+[2026-11-26T10:26:18+0000] [OK] squatter PID 2643 dihentikan
+[2026-11-26T10:26:18+0000] [OK] port 8080 bebas
+[2026-11-26T10:26:18+0000] memulihkan: systemctl start demo-http
+[2026-11-26T10:26:19+0000] pemulihan TERVERIFIKASI: service aktif + GET /health 200 (percobaan ke-2)
+exit_code=0

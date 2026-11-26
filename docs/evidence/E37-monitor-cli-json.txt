@@ -1,0 +1,64 @@
+# ============================================================
+# BUKTI AKTUAL — E37: lab-monitor output JSON terstruktur (timestamp timezone)
+# Lingkungan: sandbox agent (lihat E00)
+# Tanggal (UTC): 2026-11-26T12:15:00+00:00
+# Perintah: python3 -m monitor_lab --config monitor/config.example.json --format json ; echo exit_code=$?
+# ============================================================
+{
+  "monitor_version": "0.1.0",
+  "started_at": "2026-11-26T12:15:00+00:00",
+  "host": "e2b.local",
+  "duration_ms": 19,
+  "overall": "healthy",
+  "exit_code": 0,
+  "counts": {
+    "ok": 5,
+    "warn": 0,
+    "fail": 0,
+    "unsupported": 0,
+    "unknown": 0
+  },
+  "results": [
+    {
+      "name": "disk-root",
+      "check_type": "disk",
+      "target": "/",
+      "status": "ok",
+      "duration_ms": 0,
+      "detail": "/: 16.9% used (4.1 GiB/24.4 GiB), thresholds warn 80% crit 90% -> ok"
+    },
+    {
+      "name": "service-demo-http",
+      "check_type": "service",
+      "target": "demo-http",
+      "status": "ok",
+      "duration_ms": 5,
+      "detail": "demo-http: active"
+    },
+    {
+      "name": "dns-archive",
+      "check_type": "dns",
+      "target": "archive.ubuntu.com",
+      "status": "ok",
+      "duration_ms": 4,
+      "detail": "archive.ubuntu.com -> 185.125.190.81, 185.125.190.82, 185.125.190.83 (+15 lain) (18 alamat)"
+    },
+    {
+      "name": "tcp-demo-http",
+      "check_type": "tcp",
+      "target": "127.0.0.1:8080",
+      "status": "ok",
+      "duration_ms": 0,
+      "detail": "127.0.0.1:8080 terhubung"
+    },
+    {
+      "name": "http-demo-health",
+      "check_type": "http",
+      "target": "http://127.0.0.1:8080/health",
+      "status": "ok",
+      "duration_ms": 8,
+      "detail": "GET http://127.0.0.1:8080/health -> 200"
+    }
+  ]
+}
+exit_code=0

@@ -1,0 +1,24 @@
+# ============================================================
+# BUKTI AKTUAL — E00: konteks lingkungan tempat bukti direkam
+# Lingkungan: sandbox agent (container dev sekali-pakai) — BUKAN VM Ubuntu milik pengguna
+# Tanggal rekaman (UTC): 2026-11-25T17:53
+# Label: AKTUAL (output mentah eksekusi nyata; tanpa rekayasa)
+# ============================================================
+# KOREKSI CATATAN: pada versi pertama file ini, baris 'useradd' tertulis 'TIDAK ADA'
+# karena PATH user biasa tidak memuat /usr/sbin. Hasil yang benar: useradd & userdel
+# TERSEDIA di /usr/sbin dan ikut secure_path saat sudo. Installer memakai JALUR UTAMA
+# (bukti: E01 '[INFO] user sistem demo-http dibuat', E09 'user ... dihapus').
+# Fallback user pemanggil TIDAK dipakai pada eksekusi ini.
+# ============================================================
+PRETTY_NAME="Debian GNU/Linux 13 (trixie)"
+NAME="Debian GNU/Linux"
+VERSION_ID="13"
+VERSION="13 (trixie)"
+VERSION_CODENAME=trixie
+Linux e2b.local 6.1.189+ #1 SMP PREEMPT_DYNAMIC Mon Nov  2 21:08:28 UTC 2026 x86_64 GNU/Linux
+python3: /usr/local/bin/python3 (Python 3.13.18)
+systemd: systemd 257 (257.13-1~deb13u1)
+systemd-journald: active
+PID 1: systemd
+useradd (via sudo secure_path): /usr/sbin/useradd
+catatan: PID 1 ber-state 'degraded' karena 3 unit infrastruktur platform sandbox gagal (systemd-modules-load, chronyd-restricted, systemd-network-generator). Unit-unit itu TIDAK diutak-atik dan bukan bagian lab.

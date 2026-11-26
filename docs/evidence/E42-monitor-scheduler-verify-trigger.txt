@@ -1,0 +1,36 @@
+# ============================================================
+# BUKTI AKTUAL — E42: scheduler systemd — verify unit + trigger nyata lab-monitor.service
+# Lingkungan: sandbox agent (lihat E00)
+# Tanggal (UTC): 2026-11-26T12:17:05+00:00
+# Setup: venv .venv dibuat + pip install -e 'monitor[dev]' (jalur instalasi README);
+#        unit konkret dibuat dari template (sed @@REPO_DIR@@/@@SERVICE_USER@@)
+# Perintah: systemd-analyze verify ... ; install unit -> daemon-reload -> systemctl start
+#           lab-monitor.service -> journalctl; lalu cleanup unit dari /etc/systemd/system
+# Catatan: eksekusi PERIODIK oleh timer di VM pemilik repo = requires manual verification
+# ============================================================
+--- systemd-analyze verify:
+verify_exit=0
+
+--- install + trigger nyata:
+start_exit=0
+--- journalctl -u lab-monitor.service:
+Nov 26 12:17:05 e2b.local lab-monitor[2097]: [2026-11-26 12:17:05,863] INFO monitor mulai: config=/home/user/it-operations-ai-lab/monitor/config.json checks=5
+Nov 26 12:17:05 e2b.local lab-monitor[2097]: [2026-11-26 12:17:05,883] INFO monitor selesai: overall=healthy exit=0 durasi=20ms
+Nov 26 12:17:05 e2b.local lab-monitor[2097]: monitor 0.1.0 @ e2b.local — 2026-11-26T12:17:05+00:00
+Nov 26 12:17:05 e2b.local lab-monitor[2097]:   OK           disk-root                  /: 17.1% used (4.2 GiB/24.4 GiB), thresholds warn 80% crit 90% -> ok
+Nov 26 12:17:05 e2b.local lab-monitor[2097]:   OK           service-demo-http          demo-http: active
+Nov 26 12:17:05 e2b.local lab-monitor[2097]:   OK           dns-archive                archive.ubuntu.com -> 185.125.190.81, 185.125.190.82, 185.125.190.83 (+15 lain) (18 alamat)
+Nov 26 12:17:05 e2b.local lab-monitor[2097]:   OK           tcp-demo-http              127.0.0.1:8080 terhubung
+Nov 26 12:17:05 e2b.local lab-monitor[2097]:   OK           http-demo-health           GET http://127.0.0.1:8080/health -> 200
+Nov 26 12:17:05 e2b.local lab-monitor[2097]:   ringkasan: ok=5 warn=0 fail=0 unsupported=0 unknown=0 | healthy | exit=0
+Nov 26 12:17:05 e2b.local lab-monitor[2097]:   durasi: 20 ms
+Nov 26 12:17:05 e2b.local systemd[1]: lab-monitor.service: Deactivated successfully.
+Nov 26 12:17:05 e2b.local systemd[1]: Finished lab-monitor.service - lab-monitor - System Health Monitor (IT operations portfolio).
+
+--- cuplikan log JSON monitor (monitor/runtime/monitor.log, 3 baris terakhir):
+{"time": "2026-11-26T12:16:26.635+00:00", "level": "INFO", "logger": "monitor_lab.cli", "message": "monitor selesai: overall=healthy exit=0 durasi=16ms"}
+{"time": "2026-11-26T12:17:05.863+00:00", "level": "INFO", "logger": "monitor_lab.cli", "message": "monitor mulai: config=/home/user/it-operations-ai-lab/monitor/config.json checks=5"}
+{"time": "2026-11-26T12:17:05.883+00:00", "level": "INFO", "logger": "monitor_lab.cli", "message": "monitor selesai: overall=healthy exit=0 durasi=20ms"}
+
+--- cleanup unit scheduler dari sandbox:
+cleanup_exit=0

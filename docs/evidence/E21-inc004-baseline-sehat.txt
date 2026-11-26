@@ -1,0 +1,30 @@
+# ============================================================
+# BUKTI AKTUAL — E21: INC-004 baseline SEHAT + mode file aplikasi lab (kondisi normal)
+# Lingkungan: sandbox agent (lihat E00) — sandbox DIRESTART antar sesi (eksekusi 2026-11-26 UTC),
+#             sehingga demo-http di-install ulang bila belum ada (langkah SETUP LAB, bukan insiden)
+# Tanggal (UTC): 2026-11-26T10:20:50+00:00
+# Perintah: (opsional) sudo bash lab/scripts/install_demo_service.sh
+#           bash lab/scripts/baseline.sh
+#           stat -c '%a %U:%G %n' /opt/demo-http/demo_http_server.py
+# ============================================================
+--- [KONTEKS] demo-http belum terpasang/aktif saat perekaman — install ulang (setup lab):
+[INFO] user sistem demo-http dibuat
+Created symlink '/etc/systemd/system/multi-user.target.wants/demo-http.service' → '/etc/systemd/system/demo-http.service'.
+[OK] demo-http aktif di port 8080 (user: demo-http, python: /usr/local/bin/python3)
+Langkah berikutnya:
+  lab/scripts/baseline.sh                        # baseline sehat (harap exit 0)
+  lab/scripts/simulate_service_down.sh --yes     # simulasi insiden INC-001
+  lab/scripts/recover_service.sh                 # pemulihan
+install_exit_code=0
+--- baseline kondisi normal:
+[2026-11-26T10:20:52+0000] baseline: mulai (host=e2b.local, user=user)
+[2026-11-26T10:20:52+0000] [OK] disk: / terpakai 17% (warn 80% crit 90%)
+[2026-11-26T10:20:52+0000] [OK] service: demo-http active
+[2026-11-26T10:20:52+0000] [OK] dns: archive.ubuntu.com -> 2620:2d:4000:1::103
+[2026-11-26T10:20:52+0000] [OK] tcp: 127.0.0.1:8080 terhubung
+[2026-11-26T10:20:52+0000] [OK] http: GET http://127.0.0.1:8080/health -> 200 0.000675s
+[2026-11-26T10:20:52+0000] ringkasan: sehat=5 gagal=0 unsupported=0 total=5
+[2026-11-26T10:20:52+0000] baseline: SEHAT -> exit 0
+baseline_exit_code=0
+--- mode file aplikasi lab (normal = 755 dari installer):
+755 root:root /opt/demo-http/demo_http_server.py

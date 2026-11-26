@@ -1,0 +1,23 @@
+# ============================================================
+# BUKTI AKTUAL — E40: webhook TIDAK dapat dijangkau — hasil health check tetap utuh
+# Lingkungan: sandbox agent (lihat E00)
+# Tanggal (UTC): 2026-11-26T12:16:24+00:00
+# Setup: LAB_WEBHOOK_URL menunjuk port tertutup (127.0.0.1:9) — retry terbatas lalu warning.
+# Perintah: python3 -m monitor_lab --config /tmp/monitor-hook.json (2>&1 agar log warning ikut terekam)
+# Ekspektasi: laporan check tetap lengkap di stdout; exit code tetap 1 dari health (bukan 2);
+#            state dedup TIDAK dicatat (alert akan dicoba lagi eksekusi berikutnya)
+# ============================================================
+[2026-11-26 12:16:24,696] INFO monitor mulai: config=/tmp/monitor-hook.json checks=2
+[2026-11-26 12:16:24,712] WARNING percobaan webhook 1/2 gagal: <urlopen error [Errno 111] Connection refused>
+[2026-11-26 12:16:25,213] WARNING percobaan webhook 2/2 gagal: <urlopen error [Errno 111] Connection refused>
+[2026-11-26 12:16:25,213] WARNING gagal mengirim webhook setelah 2 percobaan — hasil health check tidak terpengaruh
+[2026-11-26 12:16:25,213] INFO monitor selesai: overall=unhealthy exit=1 durasi=6ms
+monitor 0.1.0 @ e2b.local — 2026-11-26T12:16:24+00:00
+  FAIL         tcp-closed-probe           127.0.0.1:9999: connection refused
+  OK           service-demo-http          demo-http: active
+  ringkasan: ok=1 warn=0 fail=1 unsupported=0 unknown=0 | unhealthy | exit=1
+  durasi: 6 ms
+exit_code=1
+--- state dedup (harus tidak dibuat):
+ls: cannot access '/tmp/monitor-alert-state.json': No such file or directory
+(tidak ada — benar, alert sukses baru dicatat)

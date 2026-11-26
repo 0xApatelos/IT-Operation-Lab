@@ -1,0 +1,13 @@
+# TEMPLATE timer systemd: menjalankan lab-monitor.service setiap 5 menit.
+# (Unit= tidak ditulis karena default timer memasang nama .service yang sama.)
+
+[Unit]
+Description=Jadwal lab-monitor setiap 5 menit (IT operations portfolio)
+
+[Timer]
+OnBootSec=2min
+OnUnitActiveSec=5min
+Persistent=true
+
+[Install]
+WantedBy=timers.target

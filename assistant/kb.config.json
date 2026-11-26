@@ -1,0 +1,8 @@
+{
+  "repo_root": "..",
+  "allowed_dirs": ["docs/runbooks", "docs/incidents"],
+  "top_k": 5,
+  "min_score": 8.0,
+  "max_query_chars": 500,
+  "max_chunk_chars": 1200
+}

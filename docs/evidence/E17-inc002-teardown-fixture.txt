@@ -1,0 +1,12 @@
+# ============================================================
+# BUKTI AKTUAL — E17: INC-002 teardown fixture (kembalikan lingkungan)
+# Lingkungan: sandbox agent (lihat E00)
+# Tanggal (UTC): 2026-11-26T06:56:59+00:00
+# Perintah: sudo bash lab/scripts/recover_disk_pressure.sh --teardown ; lalu verifikasi tidak ada mount
+# ============================================================
+[2026-11-26T06:56:59+0000] [INFO] /mnt/lab-disk-fixture/lab-fill.bin tidak ada (tidak apa-apa)
+[2026-11-26T06:56:59+0000] [OK] fixture di-unmount dan mountpoint dihapus — lingkungan kembali seperti awal
+exit_code=0
+--- verifikasi (harus 'not found' / kosong):
+(tidak ada mount di /mnt/lab-disk-fixture — bersih)
+ls: cannot access '/mnt/lab-disk-fixture': No such file or directory

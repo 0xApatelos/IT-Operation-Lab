@@ -1,0 +1,28 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+*.egg-info/
+dist/
+build/
+
+# Environment & secret — tidak pernah masuk git
+.env
+.env.*
+!.env.example
+
+# Log & artefak eksekusi lokal
+*.log
+lab/runtime/
+monitor/runtime/
+monitor/config.json
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/

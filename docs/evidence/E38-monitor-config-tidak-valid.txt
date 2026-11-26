@@ -1,0 +1,10 @@
+# ============================================================
+# BUKTI AKTUAL — E38: konfigurasi tidak valid (warn_pct >= crit_pct) -> exit 2
+# Lingkungan: sandbox agent (lihat E00)
+# Tanggal (UTC): 2026-11-26T12:15:58+00:00
+# Perintah: python3 -m monitor_lab --config /tmp/monitor-bad-config.json ; echo exit_code=$?
+# Isi /tmp/monitor-bad-config.json: warn_pct 90, crit_pct 80 (tidak valid)
+# Catatan: pesan [CONFIG-ERROR] ke stderr (capture 2>&1); exit code 2 sesuai dokumentasi
+# ============================================================
+[CONFIG-ERROR] checks[0] (disk-root): warn_pct (90) harus lebih kecil dari crit_pct (80)
+exit_code=2

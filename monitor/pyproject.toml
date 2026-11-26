@@ -1,0 +1,36 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "monitor-lab"
+version = "0.1.0"
+description = "System Health Monitor untuk IT operations lab (Fase 2 portofolio)"
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+authors = [{ name = "Raka Rendra Fayanto" }]
+# Runtime sengaja stdlib-only: nol dependensi produksi agar mudah diaudit
+# dan dijalankan di VM minimal. Dev-only deps di bawah.
+dependencies = []
+
+[project.optional-dependencies]
+dev = ["pytest>=8.0", "ruff>=0.6"]
+
+[project.scripts]
+lab-monitor = "monitor_lab.cli:main"
+
+[tool.setuptools]
+packages = ["monitor_lab"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+# Integration test dijalankan eksplisit: pytest -m integration
+addopts = '-m "not integration"'
+markers = [
+  "integration: tes integrasi lokal (butuh lingkungan nyata; jalankan eksplisit)",
+]
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"

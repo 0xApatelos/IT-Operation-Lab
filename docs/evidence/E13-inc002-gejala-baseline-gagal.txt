@@ -1,0 +1,15 @@
+# ============================================================
+# BUKTI AKTUAL — E13: INC-002 gejala — baseline TIDAK SEHAT karena disk >= CRIT (satu faktor)
+# Lingkungan: sandbox agent (lihat E00); konteks: E12 baru saja mengisi fixture ~88%
+# Tanggal (UTC): 2026-11-26T06:56:59+00:00
+# Perintah: DISK_PATH=/mnt/lab-disk-fixture DISK_WARN=50 DISK_CRIT=75 bash lab/scripts/baseline.sh
+# ============================================================
+[2026-11-26T06:56:59+0000] baseline: mulai (host=e2b.local, user=user)
+[2026-11-26T06:56:59+0000] [FAIL] disk: /mnt/lab-disk-fixture terpakai 88% >= CRIT 75%
+[2026-11-26T06:56:59+0000] [OK] service: demo-http active
+[2026-11-26T06:56:59+0000] [OK] dns: archive.ubuntu.com -> 2620:2d:4002:1::103
+[2026-11-26T06:56:59+0000] [OK] tcp: 127.0.0.1:8080 terhubung
+[2026-11-26T06:56:59+0000] [OK] http: GET http://127.0.0.1:8080/health -> 200 0.000834s
+[2026-11-26T06:56:59+0000] ringkasan: sehat=4 gagal=1 unsupported=0 total=5
+[2026-11-26T06:56:59+0000] baseline: TIDAK SEHAT -> exit 1
+exit_code=1

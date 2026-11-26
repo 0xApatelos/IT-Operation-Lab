@@ -1,0 +1,53 @@
+# ============================================================
+# BUKTI AKTUAL — E24: INC-004 diagnostik — status unit, journald, dan mode file
+# Lingkungan: sandbox agent (lihat E00)
+# Tanggal (UTC): 2026-11-26T10:21:18+00:00
+# Perintah: systemctl status demo-http --no-pager -l
+#           sudo journalctl -u demo-http --no-pager -n 40
+#           stat -c '%a %U:%G %n' /opt/demo-http/demo_http_server.py ; ls -l /opt/demo-http/
+# Alasan: status menunjukkan kegagalan unit; journald menunjukkan error proses (ekspektasi:
+#         python tidak dapat membuka file -> Permission denied); stat/ls mengonfirmasi mode file
+# ============================================================
+--- systemctl status:
+× demo-http.service - demo-http - layanan HTTP latihan lab (IT operations portfolio)
+     Loaded: loaded (/etc/systemd/system/demo-http.service; enabled; preset: enabled)
+     Active: failed (Result: exit-code) since Thu 2026-11-26 10:21:00 UTC; 17s ago
+   Duration: 39ms
+ Invocation: 097549ee96fd44c589fdca94f17f789b
+    Process: 1905 ExecStart=/usr/local/bin/python3 /opt/demo-http/demo_http_server.py --bind 0.0.0.0 --port 8080 (code=exited, status=2)
+   Main PID: 1905 (code=exited, status=2)
+--- journalctl:
+Nov 26 10:20:51 e2b.local systemd[1]: Started demo-http.service - demo-http - layanan HTTP latihan lab (IT operations portfolio).
+Nov 26 10:20:51 e2b.local python3[1823]: 2026-11-26 10:20:51,131 INFO demo-http 0.1.0 listening on 0.0.0.0:8080
+Nov 26 10:20:52 e2b.local python3[1823]: 2026-11-26 10:20:52,078 INFO 127.0.0.1 - "GET /health HTTP/1.1" 200 -
+Nov 26 10:20:52 e2b.local python3[1823]: 2026-11-26 10:20:52,112 INFO 127.0.0.1 - "GET /health HTTP/1.1" 200 -
+Nov 26 10:20:52 e2b.local systemd[1]: Stopping demo-http.service - demo-http - layanan HTTP latihan lab (IT operations portfolio)...
+Nov 26 10:20:52 e2b.local systemd[1]: demo-http.service: Deactivated successfully.
+Nov 26 10:20:52 e2b.local systemd[1]: Stopped demo-http.service - demo-http - layanan HTTP latihan lab (IT operations portfolio).
+Nov 26 10:20:52 e2b.local systemd[1]: Started demo-http.service - demo-http - layanan HTTP latihan lab (IT operations portfolio).
+Nov 26 10:20:52 e2b.local python3[1871]: /usr/local/bin/python3: can't open file '/opt/demo-http/demo_http_server.py': [Errno 13] Permission denied
+Nov 26 10:20:52 e2b.local systemd[1]: demo-http.service: Main process exited, code=exited, status=2/INVALIDARGUMENT
+Nov 26 10:20:52 e2b.local systemd[1]: demo-http.service: Failed with result 'exit-code'.
+Nov 26 10:20:54 e2b.local systemd[1]: demo-http.service: Scheduled restart job, restart counter is at 1.
+Nov 26 10:20:54 e2b.local systemd[1]: Started demo-http.service - demo-http - layanan HTTP latihan lab (IT operations portfolio).
+Nov 26 10:20:54 e2b.local python3[1885]: /usr/local/bin/python3: can't open file '/opt/demo-http/demo_http_server.py': [Errno 13] Permission denied
+Nov 26 10:20:54 e2b.local systemd[1]: demo-http.service: Main process exited, code=exited, status=2/INVALIDARGUMENT
+Nov 26 10:20:54 e2b.local systemd[1]: demo-http.service: Failed with result 'exit-code'.
+Nov 26 10:20:56 e2b.local systemd[1]: demo-http.service: Scheduled restart job, restart counter is at 2.
+Nov 26 10:20:56 e2b.local systemd[1]: Started demo-http.service - demo-http - layanan HTTP latihan lab (IT operations portfolio).
+Nov 26 10:20:56 e2b.local python3[1895]: /usr/local/bin/python3: can't open file '/opt/demo-http/demo_http_server.py': [Errno 13] Permission denied
+Nov 26 10:20:56 e2b.local systemd[1]: demo-http.service: Main process exited, code=exited, status=2/INVALIDARGUMENT
+Nov 26 10:20:56 e2b.local systemd[1]: demo-http.service: Failed with result 'exit-code'.
+Nov 26 10:20:58 e2b.local systemd[1]: demo-http.service: Scheduled restart job, restart counter is at 3.
+Nov 26 10:20:58 e2b.local systemd[1]: Started demo-http.service - demo-http - layanan HTTP latihan lab (IT operations portfolio).
+Nov 26 10:20:58 e2b.local python3[1905]: /usr/local/bin/python3: can't open file '/opt/demo-http/demo_http_server.py': [Errno 13] Permission denied
+Nov 26 10:20:58 e2b.local systemd[1]: demo-http.service: Main process exited, code=exited, status=2/INVALIDARGUMENT
+Nov 26 10:20:58 e2b.local systemd[1]: demo-http.service: Failed with result 'exit-code'.
+Nov 26 10:21:00 e2b.local systemd[1]: demo-http.service: Scheduled restart job, restart counter is at 4.
+Nov 26 10:21:00 e2b.local systemd[1]: demo-http.service: Start request repeated too quickly.
+Nov 26 10:21:00 e2b.local systemd[1]: demo-http.service: Failed with result 'exit-code'.
+Nov 26 10:21:00 e2b.local systemd[1]: Failed to start demo-http.service - demo-http - layanan HTTP latihan lab (IT operations portfolio).
+--- mode file:
+0 root:root /opt/demo-http/demo_http_server.py
+total 4
+---------- 1 root root 2945 Nov 26 10:20 demo_http_server.py

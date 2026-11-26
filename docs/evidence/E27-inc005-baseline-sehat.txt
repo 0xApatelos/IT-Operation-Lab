@@ -1,0 +1,21 @@
+# ============================================================
+# BUKTI AKTUAL — E27: INC-005 baseline SEHAT + pendengar port milik unit systemd (kondisi normal)
+# Lingkungan: sandbox agent (lihat E00)
+# Tanggal (UTC): 2026-11-26T10:22:24+00:00
+# Perintah: bash lab/scripts/baseline.sh ; sudo ss -ltnp '( sport = :8080 )' ; systemctl is-active demo-http
+# Catatan: sudo ss -ltnp menampilkan PID/penama proses pemilik port (butuh root)
+# ============================================================
+[2026-11-26T10:22:24+0000] baseline: mulai (host=e2b.local, user=user)
+[2026-11-26T10:22:24+0000] [OK] disk: / terpakai 17% (warn 80% crit 90%)
+[2026-11-26T10:22:24+0000] [OK] service: demo-http active
+[2026-11-26T10:22:24+0000] [OK] dns: archive.ubuntu.com -> 2620:2d:4000:1::101
+[2026-11-26T10:22:24+0000] [OK] tcp: 127.0.0.1:8080 terhubung
+[2026-11-26T10:22:24+0000] [OK] http: GET http://127.0.0.1:8080/health -> 200 0.000703s
+[2026-11-26T10:22:24+0000] ringkasan: sehat=5 gagal=0 unsupported=0 total=5
+[2026-11-26T10:22:24+0000] baseline: SEHAT -> exit 0
+baseline_exit_code=0
+--- pendengar port 8080 (kondisi normal: proses python3 unit demo-http):
+State  Recv-Q Send-Q Local Address:Port Peer Address:PortProcess                           
+LISTEN 0      5            0.0.0.0:8080      0.0.0.0:*    users:(("python3",pid=1968,fd=3))
+--- unit:
+active

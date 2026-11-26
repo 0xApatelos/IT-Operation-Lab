@@ -1,0 +1,61 @@
+# ============================================================
+# BUKTI AKTUAL — E50: server FastAPI lab-assist (uvicorn) — health, query, UI, batasan
+# Lingkungan: sandbox agent (lihat E00)
+# Tanggal (UTC): 2026-11-26T12:38:39+00:00
+# Perintah: lab-assist serve --host 127.0.0.1 --port 8077 (background), lalu curl:
+#   GET /api/health · POST /api/query (answered) · POST /api/query (abstain) ·
+#   POST query 600 karakter (ditolak) · GET / (UI, URL relatif)
+# Catatan: default bind 127.0.0.1 (akses lokal); UI memakai fetch relatif tanpa URL localhost tertanam
+# ============================================================
+--- GET /api/health:
+{"status":"ok","mode":"search-only","assistant_version":"0.1.0","kb":{"chunks":133,"documents":11,"doc_ids":["INC-001","INC-002","INC-003","INC-004","INC-005","RB-001","RB-002","RB-003","RB-004","RB-005","README"],"allowed_dirs":["/home/user/it-operations-ai-lab/docs/runbooks","/home/user/it-operations-ai-lab/docs/incidents"],"excluded_hidden_files":0}}
+
+--- POST /api/query (answered):
+{
+    "mode": "search-only",
+    "assistant_version": "0.1.0",
+    "status": "answered",
+    "query": "layanan demo-http berhenti dan tidak bisa diakses, bagaimana diagnosisnya?",
+    "safety_note": null,
+    "summary": "RB-001 \u2014 Runbook: layanan demo-http berhenti \u203a Dampak \u2014 Dampak",
+    "diagnostic_steps": [
+        "Jalankan baseline terjadwal (Fase 2: `monitor/` dengan scheduler) agar",
+        "Snapshot sebelum setiap perubahan pada unit/service."
+    ],
+    "warnings": [],
+    "follow_up_questions": [
+        "Skenario mana yang cocok dengan kondisi Anda? Dokumen kandidat: INC-001, RB-001.",
+        "Apa pesan error persisnya yang terlihat?"
+    ],
+    "limitations": [
+        "Mode search-only: potongan dokumen, bukan jawaban generatif. Assistant tidak mengeksekusi perintah, tidak mengubah sistem, dan tidak mengetahui kondisi server saat ini."
+    ],
+    "citations": [
+        {
+            "chunk_id": "RB-001:02",
+            "document_id": "RB-001",
+            "title": "RB-001 \u2014 Runbook: layanan demo-http berhenti",
+            "heading": "Dampak",
+            "path": "docs/runbooks/RB-001-service-down.md",
+            "score": 12.37
+        },
+        {
+            "chunk_id": "INC-001:00",
+
+--- POST /api/query (abstain out-of-scope):
+{
+  "status": "insufficient_evidence",
+  "limitations": [
+    "Dokumentasi yang tersedia belum cukup untuk menjawab pertanyaan ini. Tidak ada prosedur yang dikarang untuk mengisi kekosongan."
+  ]
+}
+
+--- POST query 600 karakter (harus ditolak):
+{"error":"invalid_query","detail":"pertanyaan terlalu panjang (600 > 500 karakter)"}
+
+--- GET / (UI): cuplikan (harus memuat fetch relatif, tanpa URL localhost):
+fetch('/api/query'
+0
+0 kemunculan 127.0.0.1 di UI (benar)
+
+--- verifikasi server log (query len+status, bukan isi pertanyaan):

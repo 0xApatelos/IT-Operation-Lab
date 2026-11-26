@@ -1,0 +1,13 @@
+# ============================================================
+# BUKTI AKTUAL — E28: INC-005 simulasi terkontrol — instance lab liar menempati port 8080
+# Lingkungan: sandbox agent (lihat E00)
+# Tanggal (UTC): 2026-11-26T10:22:24+00:00
+# Perintah: sudo bash lab/scripts/simulate_port_conflict.sh --yes
+# Catatan: squatter dijalankan sebagai user demo-http (bukan root), PID dicatat di lab/runtime/
+# ============================================================
+[2026-11-26T10:22:24+0000] demo-http dihentikan
+[2026-11-26T10:22:24+0000] squatter mulai: PID 2075 (log: /tmp/lab-port-squatter.log)
+[2026-11-26T10:22:25+0000] [OK] port 8080 kini didengarkan oleh PID 2075 (di luar systemd)
+[2026-11-26T10:22:25+0000] memicu: systemctl start demo-http (diharapkan gagal: Address already in use)
+[2026-11-26T10:22:55+0000] [GAGAL] unit masih activating — simulasi tidak mencapai kondisi konflik
+exit_code=1

@@ -1,0 +1,18 @@
+# ============================================================
+# BUKTI AKTUAL — E18: INC-003 gejala — resolusi gagal untuk DNS_HOST yang tidak dapat diselesaikan
+# Lingkungan: sandbox agent (lihat E00)
+# Tanggal (UTC): 2026-11-26T06:57:55+00:00
+# Perintah: DNS_HOST=nonexistent.invalid bash lab/scripts/baseline.sh
+# METODE SIMULASI (Level A, aman): memakai nama domain .invalid (RFC 6761, dijamin tidak valid)
+#   sehingga RESOLUSI untuk nama itu gagal. KONFIGURASI RESOLVER TIDAK DIUBAH sama sekali.
+#   Level B (memutus resolver di VM disposable) = requires manual verification di VM.
+# ============================================================
+[2026-11-26T06:57:55+0000] baseline: mulai (host=e2b.local, user=user)
+[2026-11-26T06:57:55+0000] [OK] disk: / terpakai 17% (warn 80% crit 90%)
+[2026-11-26T06:57:55+0000] [OK] service: demo-http active
+[2026-11-26T06:57:55+0000] [FAIL] dns: resolusi nonexistent.invalid gagal
+[2026-11-26T06:57:55+0000] [OK] tcp: 127.0.0.1:8080 terhubung
+[2026-11-26T06:57:55+0000] [OK] http: GET http://127.0.0.1:8080/health -> 200 0.000902s
+[2026-11-26T06:57:55+0000] ringkasan: sehat=4 gagal=1 unsupported=0 total=5
+[2026-11-26T06:57:55+0000] baseline: TIDAK SEHAT -> exit 1
+exit_code=1

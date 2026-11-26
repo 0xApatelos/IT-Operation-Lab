@@ -1,0 +1,15 @@
+# ============================================================
+# BUKTI AKTUAL — E09: teardown via uninstall_demo_service.sh (dengan sudo)
+# Lingkungan: sandbox agent (lihat E00)
+# Tanggal (UTC): 2026-11-25T17:54:22+00:00
+# Perintah: sudo bash lab/scripts/uninstall_demo_service.sh ; lalu cek status unit (harus tidak ditemukan)
+# ============================================================
+[2026-11-25T17:54:22+0000] stop & disable layanan...
+[2026-11-25T17:54:22+0000] [OK] unit file dihapus dari /etc/systemd/system/
+[2026-11-25T17:54:22+0000] [OK] /opt/demo-http dihapus
+[2026-11-25T17:54:22+0000] [OK] user sistem demo-http dihapus
+[2026-11-25T17:54:22+0000] teardown selesai. Snapshot VM tidak disentuh — untuk rollback level VM gunakan snapshot di hypervisor.
+exit_code=0
+--- verifikasi pasca-teardown:
+Unit demo-http.service could not be found.
+exit_code_status=4

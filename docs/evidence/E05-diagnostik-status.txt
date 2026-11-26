@@ -1,0 +1,19 @@
+# ============================================================
+# BUKTI AKTUAL — E05: diagnostik — systemctl status demo-http
+# Lingkungan: sandbox agent (lihat E00)
+# Tanggal (UTC): 2026-11-25T17:54:06+00:00
+# Perintah: systemctl status demo-http --no-pager -l ; systemctl is-active demo-http
+# Alasan: status menunjukkan kondisi unit (active/inactive, exit code proses, PID)
+# ============================================================
+○ demo-http.service - demo-http - layanan HTTP latihan lab (IT operations portfolio)
+     Loaded: loaded (/etc/systemd/system/demo-http.service; enabled; preset: enabled)
+     Active: inactive (dead) since Wed 2026-11-25 17:54:06 UTC; 59ms ago
+   Duration: 56.528s
+ Invocation: b2d2737eefaf4e25a679e9782be26f0e
+    Process: 1930 ExecStart=/usr/local/bin/python3 /opt/demo-http/demo_http_server.py --bind 0.0.0.0 --port 8080 (code=killed, signal=TERM)
+   Main PID: 1930 (code=killed, signal=TERM)
+   Mem peak: 11M
+        CPU: 63ms
+---
+inactive
+exit_code_is_active=3

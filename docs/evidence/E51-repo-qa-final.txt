@@ -1,0 +1,50 @@
+# ============================================================
+# BUKTI AKTUAL — E51: QA sweep akhir repository (konsistensi & kebersihan)
+# Lingkungan: sandbox agent (lihat E00)
+# Tanggal (UTC): 2026-11-26T12:44:44+00:00
+# ============================================================
+
+--- [1] CI workflow YAML valid:
+  valid YAML; job 'lint-and-unit' dengan 7 steps
+   - actions/checkout@v4
+   - actions/setup-python@v5
+   - Install monitor + assistant (dengan dev dependencies)
+   - Lint (ruff)
+   - Unit tests monitor (deterministik, tanpa internet/VM/secret)
+   - Unit tests assistant (deterministik, mini corpus)
+   - Evaluasi assistant (retrieval + perilaku aman, tanpa provider)
+
+--- [2] Grep pola secret di seluruh repo (tanpa .venv):
+  TIDAK ADA pola secret (bersih)
+  catatan: LAB_WEBHOOK_URL di bukti/dokumen berupa URL receiver lokal contoh (bukan secret),
+  nilai nyata selalu dari environment — desain env-based di monitor/notify.py & docs/security.
+
+--- [3] README utama menjawab 7 pertanyaan spesifikasi:
+  [OK] Masalah apa yang diselesaikan
+  [OK] benar-benar diimplementasikan
+  [OK] ketiga komponen terhubung
+  [OK] Bagaimana menjalankannya
+  [OK] menguji dan mereproduksi
+  [OK] bukti / demo
+  [OK] Keterbatasan & risiko keamanan
+
+--- [4] Placeholder @@ hanya di template unit + installer:
+./lab/scripts/install_demo_service.sh
+./lab/services/demo-http/demo-http.service
+./monitor/scheduler/lab-monitor.service
+
+--- [5] Re-run lengkap (semua test + lint + evaluasi):
+58 passed, 1 deselected in 0.43s
+43 passed, 1 warning in 0.43s
+All checks passed!
+All checks passed!
+hit@k=0.889 citation_valid=1.0 abstain=1.0 safety=1.0 p50=0.23ms p95=0.46ms violations=0
+  bash -n: semua OK
+
+--- [6] Status jujur: tidak ada 'planned' untuk hal yang sudah implemented:
+15:   *(implemented — Fase 3, Tahap A; adapter model Tahap B planned)*
+
+--- [7] Totals:
+  file repo (tanpa .venv): 197
+  file bukti: 55
+  dokumen insiden: 5 | runbook: 5

@@ -1,0 +1,20 @@
+# ============================================================
+# BUKTI AKTUAL — E46: CLI lab-assist — pertanyaan di luar cakupan -> abstain jujur
+# Lingkungan: sandbox agent (lihat E00)
+# Tanggal (UTC): 2026-11-26T12:38:02+00:00
+# Perintah: lab-assist query 'cara setup kubernetes cluster di server lab'
+# ============================================================
+mode: search-only | status: insufficient_evidence
+perlu klarifikasi:
+  - Layanan/host mana yang dimaksud?
+  - Apa pesan error atau gejala persisnya?
+  - Kapan masalah mulai muncul?
+sumber:
+  [INC-001 INC-001:03] 3. Prasyarat dan ruang lingkup (docs/incidents/INC-001-service-down.md, skor 5.692)
+  [RB-001 RB-001:06] Eskalasi & rollback (docs/runbooks/RB-001-service-down.md, skor 5.255)
+  [INC-004 INC-004:05] 5. Kondisi normal (docs/incidents/INC-004-permission-mismatch.md, skor 5.088)
+  [RB-005 RB-005:07] Pencegahan (docs/runbooks/RB-005-port-conflict.md, skor 4.294)
+  [INC-005 INC-005:15] 15. Pencegahan (docs/incidents/INC-005-port-conflict.md, skor 3.708)
+limitasi: Dokumentasi yang tersedia belum cukup untuk menjawab pertanyaan ini. Tidak ada prosedur yang dikarang untuk mengisi kekosongan.
+limitasi: Mode search-only: potongan dokumen, bukan jawaban generatif. Assistant tidak mengeksekusi perintah, tidak mengubah sistem, dan tidak mengetahui kondisi server saat ini.
+exit_code=0

@@ -1,0 +1,14 @@
+# ============================================================
+# BUKTI AKTUAL — E12: INC-002 simulasi terkontrol — isi fixture ~90%
+# Lingkungan: sandbox agent (lihat E00)
+# Tanggal (UTC): 2026-11-26T06:56:07+00:00
+# Perintah: sudo bash lab/scripts/simulate_disk_pressure.sh --yes
+# ============================================================
+[2026-11-26T06:56:07+0000] fixture sudah ter-mount sebagai tmpfs di /mnt/lab-disk-fixture (dipakai ulang, ukuran tidak diubah)
+[2026-11-26T06:56:07+0000] mengisi /mnt/lab-disk-fixture/lab-fill.bin ~28 MB (target >= 90%)
+[2026-11-26T06:56:07+0000] df -P /mnt/lab-disk-fixture -> terpakai 88%
+Filesystem     1024-blocks  Used Available Capacity Mounted on
+tmpfs                32768 28672      4096      88% /mnt/lab-disk-fixture
+[2026-11-26T06:56:07+0000] [OK] tekanan disk aktif. Gejala: DISK_PATH=/mnt/lab-disk-fixture DISK_WARN=50 DISK_CRIT=75 bash lab/scripts/baseline.sh  (harap exit 1)
+[2026-11-26T06:56:07+0000] pemulihan: sudo lab/scripts/recover_disk_pressure.sh
+exit_code=0

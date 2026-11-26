@@ -1,0 +1,10 @@
+# ============================================================
+# BUKTI AKTUAL — E25: INC-004 pemulihan — chmod 755 kembali + start + verifikasi
+# Lingkungan: sandbox agent (lihat E00)
+# Tanggal (UTC): 2026-11-26T10:21:18+00:00
+# Perintah: sudo bash lab/scripts/recover_service_permission.sh
+# ============================================================
+[2026-11-26T10:21:18+0000] [OK] mode file dikembalikan: 755 root:root /opt/demo-http/demo_http_server.py
+[2026-11-26T10:21:18+0000] memulihkan: systemctl start demo-http
+[2026-11-26T10:21:19+0000] pemulihan TERVERIFIKASI: service aktif + GET /health 200 (percobaan ke-2)
+exit_code=0

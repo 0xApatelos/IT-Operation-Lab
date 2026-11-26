@@ -1,0 +1,15 @@
+# ============================================================
+# BUKTI AKTUAL — E08: verifikasi pasca-perbaikan — baseline SEHAT kembali
+# Lingkungan: sandbox agent (lihat E00)
+# Tanggal (UTC): 2026-11-25T17:54:22+00:00
+# Perintah: bash lab/scripts/baseline.sh   (dieksekusi setelah recover)
+# ============================================================
+[2026-11-25T17:54:22+0000] baseline: mulai (host=e2b.local, user=user)
+[2026-11-25T17:54:22+0000] [OK] disk: / terpakai 17% (warn 80% crit 90%)
+[2026-11-25T17:54:22+0000] [OK] service: demo-http active
+[2026-11-25T17:54:22+0000] [OK] dns: archive.ubuntu.com -> 2620:2d:4002:1::103
+[2026-11-25T17:54:22+0000] [OK] tcp: 127.0.0.1:8080 terhubung
+[2026-11-25T17:54:22+0000] [OK] http: GET http://127.0.0.1:8080/health -> 200 0.000724s
+[2026-11-25T17:54:22+0000] ringkasan: sehat=5 gagal=0 unsupported=0 total=5
+[2026-11-25T17:54:22+0000] baseline: SEHAT -> exit 0
+exit_code=0

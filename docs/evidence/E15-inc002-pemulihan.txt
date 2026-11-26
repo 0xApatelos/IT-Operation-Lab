@@ -1,0 +1,11 @@
+# ============================================================
+# BUKTI AKTUAL — E15: INC-002 pemulihan — hapus file penyebab via recover_disk_pressure.sh
+# Lingkungan: sandbox agent (lihat E00)
+# Tanggal (UTC): 2026-11-26T06:56:59+00:00
+# Perintah: sudo bash lab/scripts/recover_disk_pressure.sh
+# ============================================================
+[2026-11-26T06:56:59+0000] [OK] /mnt/lab-disk-fixture/lab-fill.bin dihapus
+[2026-11-26T06:56:59+0000] df -P /mnt/lab-disk-fixture -> terpakai 0% (fixture tetap ter-mount untuk drill ulang)
+[2026-11-26T06:56:59+0000] verifikasi penuh: DISK_PATH=/mnt/lab-disk-fixture DISK_WARN=50 DISK_CRIT=75 bash lab/scripts/baseline.sh  (harap exit 0)
+[2026-11-26T06:56:59+0000] teardown penuh: sudo lab/scripts/recover_disk_pressure.sh --teardown
+exit_code=0

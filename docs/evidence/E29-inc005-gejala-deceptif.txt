@@ -1,0 +1,18 @@
+# ============================================================
+# BUKTI AKTUAL — E29: INC-005 gejala — service FAIL tetapi tcp/http OK (jebakan kesehatan palsu)
+# Lingkungan: sandbox agent (lihat E00)
+# Tanggal (UTC): 2026-11-26T10:22:55+00:00
+# Perintah: bash lab/scripts/baseline.sh   (dieksekusi saat unit tidak aktif dalam siklus
+#           auto-restart 'activating', port dipegang squatter)
+# Catatan: tcp OK + http OK karena squatter (instance lab sama) ikut menyajikan /health —
+#          pemeriksaan port/HTTP saja TIDAK cukup untuk memastikan layanan terkelola sehat
+# ============================================================
+[2026-11-26T10:22:55+0000] baseline: mulai (host=e2b.local, user=user)
+[2026-11-26T10:22:55+0000] [OK] disk: / terpakai 17% (warn 80% crit 90%)
+[2026-11-26T10:22:55+0000] [FAIL] service: demo-http status=activating (diharapkan active)
+[2026-11-26T10:22:55+0000] [OK] dns: archive.ubuntu.com -> 2620:2d:4000:1::101
+[2026-11-26T10:22:55+0000] [OK] tcp: 127.0.0.1:8080 terhubung
+[2026-11-26T10:22:55+0000] [OK] http: GET http://127.0.0.1:8080/health -> 200 0.000729s
+[2026-11-26T10:22:55+0000] ringkasan: sehat=4 gagal=1 unsupported=0 total=5
+[2026-11-26T10:22:55+0000] baseline: TIDAK SEHAT -> exit 1
+exit_code=1

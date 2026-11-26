@@ -1,0 +1,15 @@
+# ============================================================
+# BUKTI AKTUAL — E23: INC-004 gejala — baseline TIDAK SEHAT (unit gagal start setelah restart)
+# Lingkungan: sandbox agent (lihat E00)
+# Tanggal (UTC): 2026-11-26T10:21:01+00:00
+# Perintah: bash lab/scripts/baseline.sh   (dieksekusi setelah simulasi chmod)
+# ============================================================
+[2026-11-26T10:21:01+0000] baseline: mulai (host=e2b.local, user=user)
+[2026-11-26T10:21:01+0000] [OK] disk: / terpakai 17% (warn 80% crit 90%)
+[2026-11-26T10:21:01+0000] [FAIL] service: demo-http status=failed (diharapkan active)
+[2026-11-26T10:21:01+0000] [OK] dns: archive.ubuntu.com -> 2a06:bc80:0:1000::18
+[2026-11-26T10:21:01+0000] [FAIL] tcp: 127.0.0.1:8080 gagal (refused/timeout/port tertutup)
+[2026-11-26T10:21:01+0000] [FAIL] http: koneksi ditolak ke http://127.0.0.1:8080/health (curl rc=7)
+[2026-11-26T10:21:01+0000] ringkasan: sehat=2 gagal=3 unsupported=0 total=5
+[2026-11-26T10:21:01+0000] baseline: TIDAK SEHAT -> exit 1
+exit_code=1

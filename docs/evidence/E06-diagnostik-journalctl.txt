@@ -1,0 +1,18 @@
+# ============================================================
+# BUKTI AKTUAL — E06: diagnostik — log journald unit demo-http (dengan sudo)
+# Lingkungan: sandbox agent (lihat E00)
+# Tanggal (UTC): 2026-11-25T17:54:21+00:00
+# Perintah: sudo journalctl -u demo-http --no-pager -n 30
+# Alasan: journald merekam mulai/berhenti layanan. Catatan: tanpa sudo, user biasa
+#         tidak melihat log unit sistem (terverusi: 'No entries' — lihat versi awal
+#         percobaan ini di riwayat; akses jurnal unit sistem butuh root/grup systemd-journal)
+# ============================================================
+Nov 25 17:53:10 e2b.local systemd[1]: Started demo-http.service - demo-http - layanan HTTP latihan lab (IT operations portfolio).
+Nov 25 17:53:10 e2b.local python3[1930]: 2026-11-25 17:53:10,228 INFO demo-http 0.1.0 listening on 0.0.0.0:8080
+Nov 25 17:53:11 e2b.local python3[1930]: 2026-11-25 17:53:11,198 INFO 127.0.0.1 - "GET /health HTTP/1.1" 200 -
+Nov 25 17:53:11 e2b.local python3[1930]: 2026-11-25 17:53:11,245 INFO 127.0.0.1 - "GET /health HTTP/1.1" 200 -
+Nov 25 17:53:19 e2b.local python3[1930]: 2026-11-25 17:53:19,664 INFO 127.0.0.1 - "GET /health HTTP/1.1" 200 -
+Nov 25 17:54:06 e2b.local systemd[1]: Stopping demo-http.service - demo-http - layanan HTTP latihan lab (IT operations portfolio)...
+Nov 25 17:54:06 e2b.local systemd[1]: demo-http.service: Deactivated successfully.
+Nov 25 17:54:06 e2b.local systemd[1]: Stopped demo-http.service - demo-http - layanan HTTP latihan lab (IT operations portfolio).
+exit_code=0

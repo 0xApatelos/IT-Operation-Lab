@@ -1,0 +1,74 @@
+# ============================================================
+# BUKTI AKTUAL — E34: unit test monitor (deterministik, mock, tanpa internet/VM)
+# Lingkungan: sandbox agent (lihat E00)
+# Tanggal (UTC): 2026-11-26T12:14:59+00:00
+# Perintah: python3 -m pytest monitor/tests -v   (addopts default: integration dikecualikan)
+# ============================================================
+============================= test session starts ==============================
+platform linux -- Python 3.13.18, pytest-9.0.3, pluggy-1.7.0 -- /usr/local/bin/python3
+cachedir: .pytest_cache
+rootdir: /home/user/it-operations-ai-lab/monitor
+configfile: pyproject.toml
+plugins: anyio-4.16.0, platformdirs-4.14.8
+collecting ... collected 59 items / 1 deselected / 58 selected
+
+monitor/tests/test_checks.py::test_run_with_timeout_returns_value PASSED [  1%]
+monitor/tests/test_checks.py::test_run_with_timeout_raises_on_slow PASSED [  3%]
+monitor/tests/test_checks.py::test_run_with_timeout_propagates_exception PASSED [  5%]
+monitor/tests/test_checks.py::test_disk_ok PASSED                        [  6%]
+monitor/tests/test_checks.py::test_disk_warn PASSED                      [  8%]
+monitor/tests/test_checks.py::test_disk_over_threshold PASSED            [ 10%]
+monitor/tests/test_checks.py::test_disk_unreadable_is_fail PASSED        [ 12%]
+monitor/tests/test_checks.py::test_service_active_ok PASSED              [ 13%]
+monitor/tests/test_checks.py::test_service_inactive_fails PASSED         [ 15%]
+monitor/tests/test_checks.py::test_service_failed_fails PASSED           [ 17%]
+monitor/tests/test_checks.py::test_service_missing_unit_fails PASSED     [ 18%]
+monitor/tests/test_checks.py::test_service_unsupported_platform PASSED   [ 20%]
+monitor/tests/test_checks.py::test_dns_ok PASSED                         [ 22%]
+monitor/tests/test_checks.py::test_dns_fail PASSED                       [ 24%]
+monitor/tests/test_checks.py::test_dns_timeout PASSED                    [ 25%]
+monitor/tests/test_checks.py::test_tcp_ok PASSED                         [ 27%]
+monitor/tests/test_checks.py::test_tcp_refused PASSED                    [ 29%]
+monitor/tests/test_checks.py::test_tcp_timeout PASSED                    [ 31%]
+monitor/tests/test_checks.py::test_http_2xx_ok PASSED                    [ 32%]
+monitor/tests/test_checks.py::test_http_non_2xx PASSED                   [ 34%]
+monitor/tests/test_checks.py::test_http_refused PASSED                   [ 36%]
+monitor/tests/test_checks.py::test_http_timeout PASSED                   [ 37%]
+monitor/tests/test_checks.py::test_http_unknown_host PASSED              [ 39%]
+monitor/tests/test_cli.py::test_exit_0_when_healthy PASSED               [ 41%]
+monitor/tests/test_cli.py::test_exit_1_when_check_fails PASSED           [ 43%]
+monitor/tests/test_cli.py::test_multiple_failures_still_exit_1 PASSED    [ 44%]
+monitor/tests/test_cli.py::test_exit_0_with_unsupported_check_only PASSED [ 46%]
+monitor/tests/test_cli.py::test_exit_0_with_warn_only PASSED             [ 48%]
+monitor/tests/test_cli.py::test_exit_2_on_invalid_config PASSED          [ 50%]
+monitor/tests/test_cli.py::test_exit_2_on_missing_config PASSED          [ 51%]
+monitor/tests/test_cli.py::test_json_format_schema PASSED                [ 53%]
+monitor/tests/test_cli.py::test_json_out_written PASSED                  [ 55%]
+monitor/tests/test_cli.py::test_invalid_json_out_does_not_mask_health PASSED [ 56%]
+monitor/tests/test_config.py::test_valid_config_parses_with_defaults PASSED [ 58%]
+monitor/tests/test_config.py::test_relative_paths_resolved_against_config_dir PASSED [ 60%]
+monitor/tests/test_config.py::test_missing_file PASSED                   [ 62%]
+monitor/tests/test_config.py::test_invalid_json PASSED                   [ 63%]
+monitor/tests/test_config.py::test_empty_checks_rejected PASSED          [ 65%]
+monitor/tests/test_config.py::test_missing_checks_rejected PASSED        [ 67%]
+monitor/tests/test_config.py::test_unknown_check_type_rejected PASSED    [ 68%]
+monitor/tests/test_config.py::test_duplicate_names_rejected PASSED       [ 70%]
+monitor/tests/test_config.py::test_disk_warn_ge_crit_rejected PASSED     [ 72%]
+monitor/tests/test_config.py::test_bool_rejected_as_number PASSED        [ 74%]
+monitor/tests/test_config.py::test_port_out_of_range_rejected PASSED     [ 75%]
+monitor/tests/test_config.py::test_unit_with_space_rejected PASSED       [ 77%]
+monitor/tests/test_config.py::test_url_without_scheme_rejected PASSED    [ 79%]
+monitor/tests/test_config.py::test_timeout_out_of_range_rejected PASSED  [ 81%]
+monitor/tests/test_config.py::test_bad_log_level_rejected PASSED         [ 82%]
+monitor/tests/test_notify.py::test_disabled_by_default PASSED            [ 84%]
+monitor/tests/test_notify.py::test_no_send_when_healthy PASSED           [ 86%]
+monitor/tests/test_notify.py::test_send_and_dedup PASSED                 [ 87%]
+monitor/tests/test_notify.py::test_send_failure_does_not_raise_or_record PASSED [ 89%]
+monitor/tests/test_notify.py::test_retry_then_success PASSED             [ 91%]
+monitor/tests/test_notify.py::test_missing_env_url_skips PASSED          [ 93%]
+monitor/tests/test_output.py::test_json_schema_fields PASSED             [ 94%]
+monitor/tests/test_output.py::test_json_timestamp_has_timezone PASSED    [ 96%]
+monitor/tests/test_output.py::test_healthy_report_exit_zero PASSED       [ 98%]
+monitor/tests/test_output.py::test_text_contains_summary_and_statuses PASSED [100%]
+
+======================= 58 passed, 1 deselected in 0.39s =======================

@@ -1,0 +1,30 @@
+# demo-http.service — unit systemd untuk layanan latihan lab.
+# File ini adalah TEMPLATE: install_demo_service.sh mengganti @@PYTHON_BIN@@
+# dan @@SERVICE_USER@@ saat instalasi, karena path python3 dan nama user
+# berbeda antar sistem.
+
+[Unit]
+Description=demo-http - layanan HTTP latihan lab (IT operations portfolio)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=@@SERVICE_USER@@
+Group=@@SERVICE_USER@@
+Environment=PYTHONUNBUFFERED=1
+ExecStart=@@PYTHON_BIN@@ /opt/demo-http/demo_http_server.py --bind 0.0.0.0 --port 8080
+Restart=on-failure
+RestartSec=2
+StandardOutput=journal
+StandardError=journal
+
+# Hardening ringan (tetap mudah dipahami pemula).
+# Lihat profil lengkap dengan: systemd-analyze security demo-http
+NoNewPrivileges=yes
+ProtectSystem=strict
+ProtectHome=yes
+PrivateTmp=yes
+
+[Install]
+WantedBy=multi-user.target

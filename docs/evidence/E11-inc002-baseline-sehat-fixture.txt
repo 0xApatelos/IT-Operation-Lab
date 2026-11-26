@@ -1,0 +1,43 @@
+# ============================================================
+# BUKTI AKTUAL — E11: INC-002 baseline SEHAT pada fixture kosong (kondisi normal)
+# Lingkungan: sandbox agent (lihat E00) — sandbox DIRESTART antar sesi (eksekusi 2026-11-26 UTC),
+#             demo-http di-install ulang sebagai setup lab (bukan bagian insiden)
+# Tanggal (UTC): 2026-11-26T06:57:35+00:00
+# CATATAN KOREKSI: rekaman pertama file ini salah prosedur — fixture masih berisi sisa isi E12
+#   (88%) sehingga 'baseline sehat' yang terekam justru FAIL disk. Koreksi: fixture di-mount ulang
+#   KOSONG untuk merekam kondisi normal yang benar, lalu di-teardown. Slip rekaman didokumentasikan
+#   apa adanya (lihat juga INC-002 §17).
+# Perintah: (1) sudo bash lab/scripts/install_demo_service.sh   (setup ulang lab)
+#           (2) sudo bash lab/scripts/simulate_disk_pressure.sh --yes --mount-only   (fixture kosong)
+#           (3) DISK_PATH=/mnt/lab-disk-fixture DISK_WARN=50 DISK_CRIT=75 bash lab/scripts/baseline.sh
+#           (4) sudo bash lab/scripts/recover_disk_pressure.sh --teardown   (kembalikan kondisi awal)
+# Catatan: ambang 50/75 diturunkan agar dapat diuji pada fixture 32 MB
+# ============================================================
+--- (1) install ulang demo-http:
+[INFO] user demo-http sudah ada
+[OK] demo-http aktif di port 8080 (user: demo-http, python: /usr/local/bin/python3)
+Langkah berikutnya:
+  lab/scripts/baseline.sh                        # baseline sehat (harap exit 0)
+  lab/scripts/simulate_service_down.sh --yes     # simulasi insiden INC-001
+  lab/scripts/recover_service.sh                 # pemulihan
+install_exit_code=0
+--- (2) mount fixture kosong:
+[2026-11-26T06:57:35+0000] tmpfs 32 MB di-mount pada /mnt/lab-disk-fixture
+[2026-11-26T06:57:35+0000] [OK] fixture siap (kosong). df -P /mnt/lab-disk-fixture:
+Filesystem     1024-blocks  Used Available Capacity Mounted on
+tmpfs                32768     0     32768       0% /mnt/lab-disk-fixture
+mount_exit_code=0
+--- (3) baseline pada fixture kosong (harap exit 0):
+[2026-11-26T06:57:35+0000] baseline: mulai (host=e2b.local, user=user)
+[2026-11-26T06:57:35+0000] [OK] disk: /mnt/lab-disk-fixture terpakai 0% (warn 50% crit 75%)
+[2026-11-26T06:57:35+0000] [OK] service: demo-http active
+[2026-11-26T06:57:35+0000] [OK] dns: archive.ubuntu.com -> 2620:2d:4000:1::101
+[2026-11-26T06:57:35+0000] [OK] tcp: 127.0.0.1:8080 terhubung
+[2026-11-26T06:57:35+0000] [OK] http: GET http://127.0.0.1:8080/health -> 200 0.000759s
+[2026-11-26T06:57:35+0000] ringkasan: sehat=5 gagal=0 unsupported=0 total=5
+[2026-11-26T06:57:35+0000] baseline: SEHAT -> exit 0
+baseline_exit_code=0
+--- (4) teardown fixture:
+[2026-11-26T06:57:35+0000] [INFO] /mnt/lab-disk-fixture/lab-fill.bin tidak ada (tidak apa-apa)
+[2026-11-26T06:57:35+0000] [OK] fixture di-unmount dan mountpoint dihapus — lingkungan kembali seperti awal
+teardown_exit_code=0

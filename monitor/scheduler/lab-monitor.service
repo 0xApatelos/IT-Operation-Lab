@@ -1,0 +1,13 @@
+# TEMPLATE unit systemd untuk lab-monitor (oneshot, dipicu oleh lab-monitor.timer).
+# Ganti @@REPO_DIR@@ dan @@SERVICE_USER@@ saat instalasi (lihat monitor/README.md §Scheduler).
+# Berjalan TANPA root: semua check default dirancang tanpa hak istimewa.
+
+[Unit]
+Description=lab-monitor - System Health Monitor (IT operations portfolio)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+User=@@SERVICE_USER@@
+ExecStart=@@REPO_DIR@@/.venv/bin/lab-monitor --config @@REPO_DIR@@/monitor/config.json --format text

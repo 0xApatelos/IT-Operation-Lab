@@ -1,0 +1,31 @@
+# ============================================================
+# BUKTI AKTUAL — E28b: INC-005 simulasi ulang setelah perbaikan settle logic
+# Lingkungan: sandbox agent (lihat E00)
+# Tanggal (UTC): 2026-11-26T10:25:47+00:00
+# KONTEKS KEGAGALAN (jujur): percobaan pertama (E28) exit 1 — skrip menunggu state 'failed',
+#   tetapi kegagalan bind python (~0.5s per percobaan) tidak memicu start-limit sehingga unit
+#   terus berada dalam siklus auto-restart 'activating'. Settle logic diperbaiki: syarat sukses
+#   = unit tidak aktif (state apapun selain active) selama >=3 poll beruntun + port masih
+#   dipegang squatter. Analisis lengkap: INC-005 bagian 17.
+# Perintah: (1) sudo bash lab/scripts/recover_service_port.sh   (bersihkan state E28: kill
+#           squatter terverifikasi + hentikan siklus auto-restart)
+#           (2) sudo bash lab/scripts/simulate_port_conflict.sh --yes   (simulasi ulang)
+# ============================================================
+--- (1) pembersihan state E28:
+[2026-11-26T10:25:47+0000] unit demo-http dihentikan (membatalkan siklus auto-restart bila ada)
+[2026-11-26T10:25:47+0000] verifikasi cmdline PID 2075: python3 -u /opt/demo-http/demo_http_server.py --port 8080 
+[2026-11-26T10:25:47+0000] [OK] squatter PID 2075 dihentikan
+[2026-11-26T10:25:47+0000] [OK] port 8080 bebas
+[2026-11-26T10:25:47+0000] memulihkan: systemctl start demo-http
+[2026-11-26T10:25:48+0000] pemulihan TERVERIFIKASI: service aktif + GET /health 200 (percobaan ke-2)
+recover_exit_code=0
+--- (2) simulasi ulang:
+[2026-11-26T10:25:48+0000] demo-http dihentikan
+[2026-11-26T10:25:48+0000] squatter mulai: PID 2643 (log: /tmp/lab-port-squatter.log)
+[2026-11-26T10:25:49+0000] [OK] port 8080 kini didengarkan oleh PID 2643 (di luar systemd)
+[2026-11-26T10:25:49+0000] memicu: systemctl start demo-http (diharapkan gagal: Address already in use)
+[2026-11-26T10:25:52+0000] [OK] kondisi tersimulasi: unit demo-http tidak aktif (state: activating); port 8080 dipegang PID 2643
+[2026-11-26T10:25:52+0000] [INFO] state 'activating' = auto-restart berulang (Restart=on-failure); state 'failed' = start-limit-hit
+[2026-11-26T10:25:52+0000] gejala: bash lab/scripts/baseline.sh   (harap exit 1 — perhatikan service FAIL tetapi tcp/http OK)
+[2026-11-26T10:25:52+0000] pemulihan: sudo lab/scripts/recover_service_port.sh
+simulate_exit_code=0

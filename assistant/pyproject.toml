@@ -1,0 +1,32 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "assistant-lab"
+version = "0.1.0"
+description = "AI Helpdesk Assistant (search-only, documentation-grounded) untuk IT operations lab"
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+authors = [{ name = "Raka Rendra Fayanto" }]
+# fastapi/uvicorn HANYA untuk mode `serve` (import lazy) — CLI `query` bekerja
+# dengan stdlib saja. Retrieval sendiri stdlib-only (BM25 implementasi sendiri,
+# tanpa sklearn/rank_bm25) supaya mudah diaudit. Dev-only deps di bawah.
+dependencies = ["fastapi>=0.110", "uvicorn>=0.27"]
+
+[project.optional-dependencies]
+dev = ["pytest>=8.0", "ruff>=0.6", "httpx>=0.27"]
+
+[project.scripts]
+lab-assist = "assistant_lab.cli:main"
+
+[tool.setuptools]
+packages = ["assistant_lab"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"

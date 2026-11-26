@@ -1,0 +1,21 @@
+{
+  "checks": [
+    { "type": "disk", "name": "disk-root", "path": "/", "warn_pct": 80, "crit_pct": 90 },
+    { "type": "service", "name": "service-demo-http", "unit": "demo-http" },
+    { "type": "dns", "name": "dns-archive", "host": "archive.ubuntu.com", "timeout_seconds": 5 },
+    { "type": "tcp", "name": "tcp-demo-http", "host": "127.0.0.1", "port": 8080, "timeout_seconds": 3 },
+    { "type": "http", "name": "http-demo-health", "url": "http://127.0.0.1:8080/health", "timeout_seconds": 5 }
+  ],
+  "output": {
+    "log_file": "runtime/monitor.log",
+    "log_level": "INFO"
+  },
+  "alerts": {
+    "webhook_enabled": false,
+    "webhook_url_env": "LAB_WEBHOOK_URL",
+    "webhook_timeout_seconds": 5,
+    "retry_max": 2,
+    "dedup_seconds": 300,
+    "state_file": "runtime/alert-state.json"
+  }
+}

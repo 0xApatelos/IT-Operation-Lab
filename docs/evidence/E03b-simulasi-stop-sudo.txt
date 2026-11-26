@@ -1,0 +1,12 @@
+# ============================================================
+# BUKTI AKTUAL — E03b: simulasi terkontrol 'layanan berhenti' (INC-001), dengan sudo
+# Lingkungan: sandbox agent (lihat E00)
+# Tanggal (UTC): 2026-11-25T17:54:06+00:00
+# Perintah: sudo bash lab/scripts/simulate_service_down.sh --yes
+# Catatan: flag --yes dipakai karena eksekusi non-interaktif; tanpa flag skrip minta konfirmasi 'ya'
+# ============================================================
+[2026-11-25T17:54:06+0000] menyimulasikan insiden: systemctl stop demo-http
+[2026-11-25T17:54:06+0000] status layanan kini: inactive (diharapkan: inactive)
+[2026-11-25T17:54:06+0000] gejala dapat diamati dengan: lab/scripts/baseline.sh  (harap exit 1)
+[2026-11-25T17:54:06+0000] pemulihan: lab/scripts/recover_service.sh
+exit_code=0
