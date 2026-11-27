@@ -10,11 +10,18 @@ An integrated portfolio demonstrating two focus areas: **IT Specialist**
 > verified recovery) automated by a health monitor; **(2) AI Enthusiast** — a
 > documentation-grounded helpdesk assistant with verifiable citations, honest
 > abstention, and prompt-injection defenses.
-> **103 automated tests green · 57 real-execution evidence files · 0 safety
+> **103 automated tests green · 58 real-execution evidence files · 0 safety
 > violations in a 21-case evaluation · every claim traceable to evidence.**
 > Quick navigation: [Repo map](#repo-map) ·
 > [6-minute verification](#510-minute-demo-guide-for-interviews) ·
 > [PORTFOLIO.en.md](PORTFOLIO.en.md) (per-project recruiter summary).
+
+| Normal condition (`sc-01`) | Incident detected (`sc-02`) | Citing assistant (`sc-06`) |
+|---|---|---|
+| ![healthy baseline](docs/screenshots/png/sc-01-baseline-sehat.png) | ![incident symptoms](docs/screenshots/png/sc-02-gejala-insiden.png) | ![assistant answered](docs/screenshots/png/sc-06-assistant-answered.png) |
+
+Full gallery of 8 real-execution captures + rendering honesty rules:
+`docs/screenshots/README.en.md`.
 
 Three components:
 
@@ -69,7 +76,7 @@ the Indonesian version is the source of truth — please flag it.
 5. [Repo map](#repo-map)
 6. [Quick start](#how-do-i-run-it-quick-start)
 7. [Testing & reproduction](#how-do-i-test-and-reproduce-the-incidents)
-8. [Execution evidence E00–E53](#where-is-the-evidence--demo)
+8. [Execution evidence E00–E54](#where-is-the-evidence--demo)
 9. [Why these claims are trustworthy](#why-these-claims-are-trustworthy)
 10. [Prerequisites](#prerequisites) · [Limitations](#limitations--security-risks)
 11. [Interview demo guide](#510-minute-demo-guide-for-interviews)
@@ -172,7 +179,7 @@ it-operations-ai-lab/
 ├── assistant/              ← Phase 3: search-only assistant (45 tests, 21-case evaluation)
 ├── docs/
 │   ├── architecture/       ← network diagram + 16 technical decisions (ADRs)
-│   ├── evidence/           ← 57 real-execution evidence files (E00–E53)
+│   ├── evidence/           ← 58 real-execution evidence files (E00–E54)
 │   ├── incidents/          ← 5 sixteen-section incident documents (INC-001..005)
 │   ├── runbooks/           ← 5 quick runbooks (the assistant's KB source)
 │   ├── security/           ← lab safety rules & evidence labels

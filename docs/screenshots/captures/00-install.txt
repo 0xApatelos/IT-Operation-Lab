@@ -1,0 +1,8 @@
+[INFO] user sistem demo-http dibuat
+Created symlink '/etc/systemd/system/multi-user.target.wants/demo-http.service' → '/etc/systemd/system/demo-http.service'.
+[OK] demo-http aktif di port 8080 (user: demo-http, python: /usr/local/bin/python3)
+Langkah berikutnya:
+  lab/scripts/baseline.sh                        # baseline sehat (harap exit 0)
+  lab/scripts/simulate_service_down.sh --yes     # simulasi insiden INC-001
+  lab/scripts/recover_service.sh                 # pemulihan
+install rc=0

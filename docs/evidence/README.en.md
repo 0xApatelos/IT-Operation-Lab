@@ -117,6 +117,7 @@ invented.
 | `E51-repo-qa-final.txt` | CI YAML valid, secret grep clean, README 7-question checklist, placeholders only in templates, full re-runs | all green; 58+43 tests; hit@k 0.889; 0 violations |
 | `E52-docs-recruiter-polish-qa.txt` | docs polish QA (recruiter perspective): new README structure, cross-file links, number consistency + annotation of the hit@k=1.0 finding | structure 5/5; broken links 0; KB finding followed up in E53 |
 | `E53-kb-exclude-globs-sideeffect.txt` | EN-mirror side effect on the assistant KB + the `exclude_globs` fix (D17) | baseline restored: hit@k 0.889, 133/11, 45 assistant tests, clean ruff |
+| `E54-screenshots-nyata.txt` | Real-execution screenshots (service reinstall + 10 capture steps + transparent rendering) | 8 PNGs rendered verbatim from captures/; the renderer never changes text; "not a VM" label in the footer |
 
 Per-project recruiter summary & demo map: `PORTFOLIO.en.md` (root).
 Manual-scoring rubric template: `assistant/evaluation/rubrik-manual.en.md`

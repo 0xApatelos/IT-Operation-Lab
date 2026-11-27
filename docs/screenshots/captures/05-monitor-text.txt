@@ -1,0 +1,12 @@
+$ python3 -m monitor_lab --config config.json --format text   # dijalankan dari folder monitor/
+[2026-11-27 14:27:34,574] INFO monitor mulai: config=config.json checks=5
+[2026-11-27 14:27:34,590] INFO monitor selesai: overall=healthy exit=0 durasi=16ms
+monitor 0.1.0 @ e2b.local — 2026-11-27T14:27:34+00:00
+  OK           disk-root                  /: 16.7% used (4.1 GiB/24.4 GiB), thresholds warn 80% crit 90% -> ok
+  OK           service-demo-http          demo-http: active
+  OK           dns-archive                archive.ubuntu.com -> 185.125.190.81, 185.125.190.82, 185.125.190.83 (+15 lain) (18 alamat)
+  OK           tcp-demo-http              127.0.0.1:8080 terhubung
+  OK           http-demo-health           GET http://127.0.0.1:8080/health -> 200
+  ringkasan: ok=5 warn=0 fail=0 unsupported=0 unknown=0 | healthy | exit=0
+  durasi: 16 ms
+exit code: 0

@@ -10,11 +10,18 @@ dokumentasi dengan kutipan sumber yang bisa diperiksa).
 > cause → pemulihan terverifikasi) yang diotomasi monitor kesehatan;
 > **(2) AI Enthusiast** — asisten helpdesk *documentation-grounded* dengan
 > kutipan sumber, abstain jujur, dan pertahanan prompt injection.
-> **103 test otomatis hijau · 57 file bukti eksekusi nyata · 0 pelanggaran
+> **103 test otomatis hijau · 58 file bukti eksekusi nyata · 0 pelanggaran
 > keamanan pada evaluasi 21 kasus · setiap klaim bisa dilacak ke bukti.**
 > Navigasi cepat: [Peta repo](#peta-repo) ·
 > [Verifikasi 6 menit](#panduan-demo-510-menit-untuk-wawancara) ·
 > [PORTFOLIO.md](PORTFOLIO.md) (ringkasan per proyek untuk recruiter).
+
+| Kondisi normal (`sc-01`) | Insiden terdeteksi (`sc-02`) | Assistant berkutipan (`sc-06`) |
+|---|---|---|
+| ![baseline sehat](docs/screenshots/png/sc-01-baseline-sehat.png) | ![gejala insiden](docs/screenshots/png/sc-02-gejala-insiden.png) | ![assistant answered](docs/screenshots/png/sc-06-assistant-answered.png) |
+
+Galeri lengkap 8 tangkapan eksekusi nyata + aturan kejujuran render:
+`docs/screenshots/README.md`.
 
 Tiga komponen:
 
@@ -46,7 +53,7 @@ Tiga komponen:
 5. [Peta repo](#peta-repo)
 6. [Quick start](#bagaimana-menjalankannya-quick-start)
 7. [Cara menguji & mereproduksi](#bagaimana-menguji-dan-mereproduksi-insiden)
-8. [Bukti eksekusi E00–E53](#di-mana-bukti--demo)
+8. [Bukti eksekusi E00–E54](#di-mana-bukti--demo)
 9. [Mengapa klaim ini bisa dipercaya](#mengapa-klaim-ini-bisa-dipercaya)
 10. [Prasyarat](#prasyarat) · [Keterbatasan](#keterbatasan--risiko-keamanan)
 11. [Panduan demo wawancara](#panduan-demo-510-menit-untuk-wawancara)
@@ -148,7 +155,7 @@ it-operations-ai-lab/
 ├── assistant/              ← Fase 3: asisten search-only (45 unit test, evaluasi 21 kasus)
 ├── docs/
 │   ├── architecture/       ← diagram jaringan + 16 keputusan teknis (ADR)
-│   ├── evidence/           ← 57 file bukti eksekusi nyata (E00–E53)
+│   ├── evidence/           ← 58 file bukti eksekusi nyata (E00–E54)
 │   ├── incidents/          ← 5 dokumen insiden 16 bagian (INC-001..005)
 │   ├── runbooks/           ← 5 runbook cepat (sumber KB assistant)
 │   ├── security/           ← aturan keselamatan lab & label bukti

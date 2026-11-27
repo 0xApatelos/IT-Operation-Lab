@@ -1,0 +1,4 @@
+[2026-11-27T14:27:11+0000] menyimulasikan insiden: systemctl stop demo-http
+[2026-11-27T14:27:11+0000] status layanan kini: inactive (diharapkan: inactive)
+[2026-11-27T14:27:11+0000] gejala dapat diamati dengan: lab/scripts/baseline.sh  (harap exit 1)
+[2026-11-27T14:27:11+0000] pemulihan: lab/scripts/recover_service.sh

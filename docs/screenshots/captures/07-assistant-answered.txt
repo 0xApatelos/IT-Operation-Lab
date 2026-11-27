@@ -1,0 +1,17 @@
+$ lab-assist query "layanan demo-http berhenti bagaimana diagnosisnya?"
+mode: search-only | status: answered
+ringkasan: INC-001 — Layanan demo-http berhenti › INC-001 — Layanan demo-http berhenti — INC-001 — Layanan demo-http berhenti
+langkah diagnostik (dari dokumen):
+  1. Jalankan baseline terjadwal (Fase 2: `monitor/` dengan scheduler) agar
+  2. Snapshot sebelum setiap perubahan pada unit/service.
+perlu klarifikasi:
+  - Skenario mana yang cocok dengan kondisi Anda? Dokumen kandidat: INC-001, RB-001.
+  - Apa pesan error persisnya yang terlihat?
+sumber:
+  [INC-001 INC-001:00] INC-001 — Layanan demo-http berhenti (docs/incidents/INC-001-service-down.md, skor 8.002)
+  [RB-001 RB-001:00] RB-001 — Runbook: layanan demo-http berhenti (docs/runbooks/RB-001-service-down.md, skor 7.389)
+  [INC-001 INC-001:01] 1. ID dan judul (docs/incidents/INC-001-service-down.md, skor 7.199)
+  [RB-001 RB-001:02] Dampak (docs/runbooks/RB-001-service-down.md, skor 6.259)
+  [RB-001 RB-001:07] Pencegahan (docs/runbooks/RB-001-service-down.md, skor 6.099)
+limitasi: Mode search-only: potongan dokumen, bukan jawaban generatif. Assistant tidak mengeksekusi perintah, tidak mengubah sistem, dan tidak mengetahui kondisi server saat ini.
+exit code: 0

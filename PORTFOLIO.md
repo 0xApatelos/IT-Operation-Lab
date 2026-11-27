@@ -4,12 +4,13 @@
 > `docs/evidence/` (label lingkungan: sandbox Debian 13 + systemd, bukan VM).
 > Tidak ada angka dampak bisnis, jumlah pengguna, atau penghematan waktu —
 > tidak diukur, tidak dikarang. Status terperinci per fitur: `README.md`.
+> Tangkapan layar eksekusi nyata (8 gambar): `docs/screenshots/README.md`.
 
 ## Elevator pitch (30 detik)
 
 Repo ini membuktikan dua kompetensi lewat artefak, bukan klaim: lima skenario
 insiden Linux yang dibangun–dipatahkan–didagnosis–dipulihkan end-to-end
-(57 file bukti eksekusi nyata), dan asisten AI yang setiap jawabannya bisa
+(58 file bukti eksekusi nyata), dan asisten AI yang setiap jawabannya bisa
 dilacak ke runbook serta menolak mengarang prosedur berisiko. **103 test
 otomatis hijau, 0 pelanggaran keamanan pada evaluasi 21 kasus** — dan
 kegagalan development dipertahankan apa adanya sebagai bukti cara kerja.
@@ -32,7 +33,7 @@ skenario insiden** yang bisa direproduksi dan dipulihkan end-to-end: layanan
 berhenti, disk melewati ambang, DNS gagal, permission salah, konflik port.
 Setiap insiden punya dokumen 16 bagian (gejala → hipotesis → diagnostik →
 root cause → perbaikan → verifikasi → pencegahan) plus runbook cepat, dengan
-57 file bukti eksekusi.
+58 file bukti eksekusi.
 
 **Tiga kontribusi teknis (didukung implementasi nyata):**
 1. Layanan latihan stdlib-only + installer systemd dengan hardening ringan

@@ -1,0 +1,2 @@
+[2026-11-27T14:27:11+0000] memulihkan: systemctl start demo-http
+[2026-11-27T14:27:12+0000] pemulihan TERVERIFIKASI: service aktif + GET /health 200 (percobaan ke-2)

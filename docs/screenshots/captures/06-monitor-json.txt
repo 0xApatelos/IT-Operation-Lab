@@ -1,0 +1,18 @@
+$ python3 -m monitor_lab --config config.json --format json   # (output dipotong)
+[2026-11-27 14:28:16,157] INFO monitor mulai: config=config.json checks=5
+[2026-11-27 14:28:16,178] INFO monitor selesai: overall=healthy exit=0 durasi=20ms
+{
+  "monitor_version": "0.1.0",
+  "started_at": "2026-11-27T14:28:16+00:00",
+  "host": "e2b.local",
+  "duration_ms": 20,
+  "overall": "healthy",
+  "exit_code": 0,
+  "counts": {
+    "ok": 5,
+    "warn": 0,
+    "fail": 0,
+    "unsupported": 0,
+    "unknown": 0
+    ... (dipotong)
+exit code: 0

@@ -5,11 +5,12 @@
 > VM). No business-impact numbers, user counts, or time savings — not
 > measured, not invented. Detailed per-feature status: `README.en.md`.
 > Indonesian original: `PORTFOLIO.md`.
+> Real-execution screenshots (8 images): `docs/screenshots/README.en.md`.
 
 ## 30-second elevator pitch
 
 This repo proves two competencies through artifacts, not claims: five Linux
-incident scenarios built, broken, diagnosed, and recovered end to end (57
+incident scenarios built, broken, diagnosed, and recovered end to end (58
 real-execution evidence files), and an AI assistant whose every answer is
 traceable to the runbooks and which refuses to invent risky procedures.
 **103 automated tests green, 0 safety violations in a 21-case evaluation** —
@@ -34,7 +35,7 @@ actually executed in a systemd sandbox) with one practice service and **five
 incident scenarios** that can be reproduced and recovered end to end: service
 stopped, disk over threshold, DNS failure, wrong permissions, port conflict.
 Each incident has a 16-section document (symptoms → hypotheses → diagnostics →
-root cause → fix → verification → prevention) plus a quick runbook, with 57
+root cause → fix → verification → prevention) plus a quick runbook, with 58
 evidence files of real executions.
 
 **Three technical contributions (backed by real implementation):**
